@@ -62,7 +62,7 @@ defmodule Typster.MixProject do
       {:req, "~> 0.5"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.26"},
+      {:gettext, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
@@ -71,7 +71,7 @@ defmodule Typster.MixProject do
       {:ex_aws_s3, "~> 2.5"},
       {:hackney, "~> 1.20"},
       {:salad_ui, "~> 1.0.0-beta.3"},
-      {:credo, "~> 1.7.0-rc.1", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7.0-rc.1", only: [:dev, :test], runtime: false}
     ]
   end
 
