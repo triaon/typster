@@ -38,3 +38,6 @@ npm-debug.log
 # pixi environments
 .pixi/*
 !.pixi/config.toml
+
+# Ignore sarif files (security scan results).
+*.sarif
