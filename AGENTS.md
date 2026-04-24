@@ -39,40 +39,46 @@ custom classes must fully style the input
 
 LiveViews that require login should **always be placed inside the __existing__ `live_session :require_authenticated_user` block**:
 
-    scope "/", AppWeb do
-      pipe_through [:browser, :require_authenticated_user]
+```elixir
+scope "/", AppWeb do
+  pipe_through [:browser, :require_authenticated_user]
 
-      live_session :require_authenticated_user,
-        on_mount: [{TypsterWeb.UserAuth, :require_authenticated}] do
-        # phx.gen.auth generated routes
-        live "/users/settings", UserLive.Settings, :edit
-        live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
-        # our own routes that require logged in user
-        live "/", MyLiveThatRequiresAuth, :index
-      end
-    end
+  live_session :require_authenticated_user,
+    on_mount: [{TypsterWeb.UserAuth, :require_authenticated}] do
+    # phx.gen.auth generated routes
+    live "/users/settings", UserLive.Settings, :edit
+    live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
+    # our own routes that require logged in user
+    live "/", MyLiveThatRequiresAuth, :index
+  end
+end
+```
 
 Controller routes must be placed in a scope that sets the `:require_authenticated_user` plug:
 
-    scope "/", AppWeb do
-      pipe_through [:browser, :require_authenticated_user]
+```elixir
+scope "/", AppWeb do
+  pipe_through [:browser, :require_authenticated_user]
 
-      get "/", MyControllerThatRequiresAuth, :index
-    end
+  get "/", MyControllerThatRequiresAuth, :index
+end
+```
 
 ### Routes that work with or without authentication
 
 LiveViews that can work with or without authentication, **always use the __existing__ `:current_user` scope**, ie:
 
-    scope "/", MyAppWeb do
-      pipe_through [:browser]
+```elixir
+scope "/", MyAppWeb do
+  pipe_through [:browser]
 
-      live_session :current_user,
-        on_mount: [{TypsterWeb.UserAuth, :mount_current_scope}] do
-        # our own routes that work with or without authentication
-        live "/", PublicLive
-      end
-    end
+  live_session :current_user,
+    on_mount: [{TypsterWeb.UserAuth, :mount_current_scope}] do
+    # our own routes that work with or without authentication
+    live "/", PublicLive
+  end
+end
+```
 
 Controllers automatically have the `current_scope` available if they use the `:browser` pipeline.
 
