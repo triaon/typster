@@ -88,9 +88,7 @@ defmodule TypsterWeb do
       import TypsterWeb.CoreComponents
 
       # Import SaladUI components
-      import TypsterWeb.Components.UI.Button
       import TypsterWeb.Components.UI.Card
-      import TypsterWeb.Components.UI.Input
       import TypsterWeb.Components.UI.Dialog
       import TypsterWeb.Components.UI.Badge
       import TypsterWeb.Components.UI.Separator
