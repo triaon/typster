@@ -3,16 +3,20 @@ defmodule TypsterWeb.ProjectLive.Show do
 
   alias Typster.Projects
   alias Typster.Files
+  alias Typster.Assets
 
   @impl true
   def mount(%{"id" => id}, _session, socket) do
-    project = Projects.get_project!(id)
-    file_tree = Files.get_file_tree(id)
+    scope = socket.assigns.current_scope
+    project = Projects.get_project!(scope, id)
+    file_tree = Files.get_file_tree(scope, id)
+    assets = Assets.list_assets(scope, id)
 
     {:ok,
      socket
      |> assign(:project, project)
-     |> assign(:file_tree, file_tree)}
+     |> assign(:file_tree, file_tree)
+     |> assign(:assets, assets)}
   end
 
   @impl true
@@ -20,15 +24,16 @@ defmodule TypsterWeb.ProjectLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, socket.assigns.project.name)
-     |> assign(:project, Projects.get_project!(id))}
+     |> assign(:project, Projects.get_project!(socket.assigns.current_scope, id))}
   end
 
   @impl true
   def handle_event("delete_file", %{"id" => file_id}, socket) do
-    file = Files.get_file!(file_id)
-    {:ok, _} = Files.delete_file(file)
+    scope = socket.assigns.current_scope
+    file = Files.get_file!(scope, file_id)
+    {:ok, _} = Files.delete_file(scope, file)
 
-    file_tree = Files.get_file_tree(socket.assigns.project.id)
+    file_tree = Files.get_file_tree(scope, socket.assigns.project.id)
 
     {:noreply, assign(socket, :file_tree, file_tree)}
   end

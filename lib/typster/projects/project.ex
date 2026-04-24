@@ -7,6 +7,7 @@ defmodule Typster.Projects.Project do
 
   schema "projects" do
     field :name, :string
+    belongs_to :user, Typster.Accounts.User
     has_many :files, Typster.Projects.File
     has_many :assets, Typster.Assets.Asset
     timestamps(type: :utc_datetime)
@@ -17,5 +18,7 @@ defmodule Typster.Projects.Project do
     project
     |> cast(attrs, [:name])
     |> validate_required([:name])
+    |> validate_required([:user_id])
+    |> assoc_constraint(:user)
   end
 end

@@ -15,7 +15,8 @@ defmodule Typster.Projects.FileRevision do
   @doc false
   def changeset(file_revision, attrs) do
     file_revision
-    |> cast(attrs, [:content, :sequence, :file_id, :inserted_at])
+    |> cast(attrs, [:content, :sequence])
     |> validate_required([:content, :sequence, :file_id, :inserted_at])
+    |> assoc_constraint(:file)
   end
 end

@@ -3,7 +3,6 @@ defmodule Typster.Jobs.AssetCleanup do
 
   @impl Oban.Worker
   def perform(_job) do
-    alias Typster.Assets
     alias Typster.Repo
 
     import Ecto.Query
@@ -23,7 +22,7 @@ defmodule Typster.Jobs.AssetCleanup do
       end)
 
     Enum.each(orphaned_assets, fn asset ->
-      Assets.delete_asset(asset)
+      Repo.delete(asset)
     end)
 
     :ok

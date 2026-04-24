@@ -18,7 +18,8 @@ defmodule Typster.Projects.File do
   @doc false
   def changeset(file, attrs) do
     file
-    |> cast(attrs, [:path, :content, :project_id, :parent_id])
+    |> cast(attrs, [:path, :content, :parent_id])
     |> validate_required([:path, :project_id])
+    |> assoc_constraint(:project)
   end
 end

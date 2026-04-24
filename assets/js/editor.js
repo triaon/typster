@@ -119,9 +119,10 @@ function getThemeExtension() {
   return getCurrentTheme() === "dark" ? darkTheme : lightTheme
 }
 
-export function initEditor(container, initialContent, socket, fileId) {
+export function initEditor(container, initialContent, socket, fileId, options = {}) {
   let autosaveTimer = null
   const themeCompartment = new Compartment()
+  const language = options.language || "typst"
 
   const updateListener = EditorView.updateListener.of((update) => {
     if (update.docChanged) {
@@ -130,6 +131,7 @@ export function initEditor(container, initialContent, socket, fileId) {
       const content = update.state.doc.toString()
 
       if (fileId && socket) {
+        socket.pushEvent("save_started", {})
         autosaveTimer = setTimeout(() => {
           socket.pushEvent("autosave", {
             file_id: fileId,
@@ -138,7 +140,9 @@ export function initEditor(container, initialContent, socket, fileId) {
         }, 500)
       }
 
-      compileTypst(content)
+      if (language === "typst") {
+        compileTypst(content, options.project || {})
+      }
     }
   })
 
@@ -147,7 +151,7 @@ export function initEditor(container, initialContent, socket, fileId) {
     extensions: [
       basicSetup,
       themeCompartment.of(getThemeExtension()),
-      typst(),
+      language === "typst" ? typst() : [],
       updateListener
     ]
   })
@@ -157,8 +161,8 @@ export function initEditor(container, initialContent, socket, fileId) {
     parent: container
   })
 
-  if (initialContent) {
-    compileTypst(initialContent)
+  if (initialContent && language === "typst") {
+    compileTypst(initialContent, options.project || {})
   }
 
   const updateTheme = () => {

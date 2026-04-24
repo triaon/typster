@@ -1,91 +1,203 @@
 defmodule TypsterWeb.EditorLive.Index do
   use TypsterWeb, :live_view
 
-  alias Typster.Projects
+  alias Typster.Assets
   alias Typster.Files
+  alias Typster.Projects
   alias Typster.Revisions
 
   @impl true
   def mount(%{"id" => project_id}, _session, socket) do
-    project = Projects.get_project!(project_id)
-    file_tree = Files.get_file_tree(project_id)
-
-    main_file =
-      case file_tree do
-        [file | _] -> file
-        [] -> nil
-      end
+    scope = socket.assigns.current_scope
+    project = Projects.get_project!(scope, project_id)
+    file_tree = Files.get_file_tree(scope, project_id)
+    assets = Assets.list_assets(scope, project_id)
+    main_file = initial_file(file_tree)
 
     {:ok,
      socket
      |> assign(:project, project)
      |> assign(:file_tree, file_tree)
+     |> assign(:assets, assets)
      |> assign(:current_file, main_file)
      |> assign(:content, if(main_file, do: main_file.content || "", else: ""))
+     |> assign(:editor_language, editor_language(main_file))
+     |> assign(:project_sources, project_sources(file_tree))
+     |> assign(:project_assets, project_assets(assets))
      |> assign(:save_status, "saved")
      |> assign(:preview_svg, nil)
-     |> assign(:page_title, project.name)}
+     |> assign(:preview_error, nil)
+     |> assign(:page_title, project.name)
+     |> allow_upload(:asset,
+       accept: ~w(.pdf .png .jpg .jpeg .svg .webp .ttf .otf .woff .woff2),
+       max_entries: 5,
+       max_file_size: 20_000_000
+     )}
   end
 
   @impl true
   def handle_params(_params, _url, socket) do
-    {:noreply,
-     socket
-     |> assign(:page_title, socket.assigns.project.name)}
+    {:noreply, assign(socket, :page_title, socket.assigns.project.name)}
+  end
+
+  @impl true
+  def handle_event("save_started", _params, socket) do
+    {:noreply, assign(socket, :save_status, "saving")}
   end
 
   @impl true
   def handle_event("autosave", %{"file_id" => file_id, "content" => content}, socket) do
-    file = Files.get_file!(file_id)
+    scope = socket.assigns.current_scope
+    file = Files.get_file!(scope, file_id)
 
-    case Files.update_file_content(file, content) do
-      {:ok, updated_file} ->
-        Revisions.create_revision(file_id, content)
+    if socket.assigns.current_file && socket.assigns.current_file.id == file.id do
+      case Files.update_file_content(scope, file, content) do
+        {:ok, updated_file} ->
+          Revisions.create_revision(scope, file_id, content)
+          file_tree = Files.get_file_tree(scope, socket.assigns.project.id)
 
-        {:noreply,
-         socket
-         |> assign(:current_file, updated_file)
-         |> assign(:content, content)
-         |> assign(:save_status, "saved")}
+          {:noreply,
+           socket
+           |> assign(:current_file, updated_file)
+           |> assign(:file_tree, file_tree)
+           |> assign(:project_sources, project_sources(file_tree))
+           |> assign(:content, content)
+           |> assign(:save_status, "saved")}
 
-      {:error, _changeset} ->
-        {:noreply, assign(socket, :save_status, "error")}
+        {:error, _changeset} ->
+          {:noreply, assign(socket, :save_status, "error")}
+      end
+    else
+      {:noreply, assign(socket, :save_status, "error")}
     end
   end
 
   @impl true
   def handle_event("update_preview", %{"svg" => svg}, socket) do
-    {:noreply, assign(socket, :preview_svg, svg)}
+    {:noreply, assign(socket, preview_svg: svg, preview_error: nil)}
+  end
+
+  @impl true
+  def handle_event("preview_error", %{"message" => message}, socket) do
+    {:noreply, assign(socket, :preview_error, message)}
   end
 
   @impl true
   def handle_event("select_file", %{"file_id" => file_id}, socket) do
-    file = Files.get_file!(file_id)
+    scope = socket.assigns.current_scope
+    file = Files.get_file!(scope, file_id)
 
-    {:noreply,
-     socket
-     |> assign(:current_file, file)
-     |> assign(:content, file.content || "")
-     |> push_event("file_changed", %{file_id: file_id, content: file.content || ""})
-     |> push_event("content_updated", %{content: file.content || ""})}
+    if Files.editable_file?(file) do
+      {:noreply,
+       socket
+       |> assign(:current_file, file)
+       |> assign(:content, file.content || "")
+       |> assign(:editor_language, editor_language(file))
+       |> assign(:save_status, "saved")
+       |> push_event("file_changed", %{
+         file_id: file_id,
+         content: file.content || "",
+         language: editor_language(file)
+       })
+       |> push_event("content_updated", %{content: file.content || ""})}
+    else
+      {:noreply, put_flash(socket, :error, "Binary assets cannot be opened in the editor.")}
+    end
   end
 
   @impl true
   def handle_event("create_file", %{"path" => path, "content" => content}, socket) do
-    case Files.create_file(socket.assigns.project.id, %{path: path, content: content}) do
+    if Files.editable_file?(path) do
+      create_text_file(socket, path, content)
+    else
+      {:noreply, put_flash(socket, :error, "Only .typ and .bib files can be edited.")}
+    end
+  end
+
+  @impl true
+  def handle_event("validate_upload", _params, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("save_upload", _params, socket) do
+    scope = socket.assigns.current_scope
+    project_id = socket.assigns.project.id
+
+    results =
+      consume_uploaded_entries(socket, :asset, fn %{path: path}, entry ->
+        Assets.upload_entry(scope, project_id, %{
+          path: path,
+          client_name: entry.client_name,
+          client_type: entry.client_type
+        })
+      end)
+
+    case Enum.find(results, &match?({:error, _}, &1)) do
+      nil ->
+        assets = Assets.list_assets(scope, project_id)
+
+        {:noreply,
+         socket
+         |> assign(:assets, assets)
+         |> assign(:project_assets, project_assets(assets))
+         |> put_flash(:info, "Asset uploaded.")}
+
+      {:error, _reason} ->
+        {:noreply, put_flash(socket, :error, "Asset upload failed.")}
+    end
+  end
+
+  defp create_text_file(socket, path, content) do
+    scope = socket.assigns.current_scope
+
+    case Files.create_file(scope, socket.assigns.project.id, %{path: path, content: content}) do
       {:ok, file} ->
-        file_tree = Files.get_file_tree(socket.assigns.project.id)
+        file_tree = Files.get_file_tree(scope, socket.assigns.project.id)
 
         {:noreply,
          socket
          |> assign(:file_tree, file_tree)
+         |> assign(:project_sources, project_sources(file_tree))
          |> assign(:current_file, file)
          |> assign(:content, content)
-         |> push_event("file_changed", %{file_id: file.id, content: content})
+         |> assign(:editor_language, editor_language(file))
+         |> push_event("file_changed", %{
+           file_id: file.id,
+           content: content,
+           language: editor_language(file)
+         })
          |> push_event("content_updated", %{content: content})}
 
       {:error, _changeset} ->
-        {:noreply, socket}
+        {:noreply, put_flash(socket, :error, "File could not be created.")}
     end
+  end
+
+  defp initial_file(file_tree) do
+    Enum.find(file_tree, &(&1.path == "main.typ")) ||
+      Enum.find(file_tree, &Files.editable_file?/1)
+  end
+
+  defp editor_language(nil), do: "plain"
+  defp editor_language(file), do: Files.editor_language(file.path)
+
+  defp project_sources(file_tree) do
+    file_tree
+    |> Enum.filter(&Files.editable_file?/1)
+    |> Enum.map(fn file ->
+      %{path: file.path, content: file.content || "", language: Files.editor_language(file.path)}
+    end)
+  end
+
+  defp project_assets(assets) do
+    Enum.map(assets, fn asset ->
+      %{
+        filename: asset.filename,
+        reference_path: Assets.reference_path(asset),
+        content_type: asset.content_type,
+        size: asset.size
+      }
+    end)
   end
 end

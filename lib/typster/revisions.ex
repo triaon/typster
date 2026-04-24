@@ -4,27 +4,43 @@ defmodule Typster.Revisions do
   """
 
   import Ecto.Query, warn: false
+  alias Typster.Accounts.Scope
   alias Typster.Repo
   alias Typster.Projects.FileRevision
 
-  def get_revision!(id), do: Repo.get!(FileRevision, id)
+  def get_revision!(%Scope{user: user}, id) do
+    from(r in FileRevision,
+      join: f in assoc(r, :file),
+      join: p in assoc(f, :project),
+      where: r.id == ^id and p.user_id == ^user.id
+    )
+    |> Repo.one!()
+  end
 
-  def get_revision(id), do: Repo.get(FileRevision, id)
+  def get_revision(%Scope{user: user}, id) do
+    from(r in FileRevision,
+      join: f in assoc(r, :file),
+      join: p in assoc(f, :project),
+      where: r.id == ^id and p.user_id == ^user.id
+    )
+    |> Repo.one()
+  end
 
-  def create_revision(file_id, content) do
-    sequence = get_next_sequence(file_id)
+  def create_revision(%Scope{} = scope, file_id, content) do
+    _file = Typster.Files.get_file!(scope, file_id)
+    sequence = get_next_sequence(scope, file_id)
 
-    %FileRevision{}
+    %FileRevision{file_id: file_id, inserted_at: DateTime.utc_now(:second)}
     |> FileRevision.changeset(%{
-      file_id: file_id,
       content: content,
-      sequence: sequence,
-      inserted_at: DateTime.utc_now()
+      sequence: sequence
     })
     |> Repo.insert()
   end
 
-  def list_revisions(file_id) do
+  def list_revisions(%Scope{} = scope, file_id) do
+    _file = Typster.Files.get_file!(scope, file_id)
+
     from(r in FileRevision,
       where: r.file_id == ^file_id,
       order_by: [desc: r.sequence]
@@ -32,14 +48,16 @@ defmodule Typster.Revisions do
     |> Repo.all()
   end
 
-  def restore_revision(revision_id) do
-    revision = get_revision!(revision_id)
-    file = Typster.Files.get_file!(revision.file_id)
+  def restore_revision(%Scope{} = scope, revision_id) do
+    revision = get_revision!(scope, revision_id)
+    file = Typster.Files.get_file!(scope, revision.file_id)
 
-    Typster.Files.update_file_content(file, revision.content)
+    Typster.Files.update_file_content(scope, file, revision.content)
   end
 
-  defp get_next_sequence(file_id) do
+  defp get_next_sequence(scope, file_id) do
+    _file = Typster.Files.get_file!(scope, file_id)
+
     from(r in FileRevision,
       where: r.file_id == ^file_id,
       select: max(r.sequence)

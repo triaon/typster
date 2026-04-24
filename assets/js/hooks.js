@@ -3,8 +3,26 @@ import { initTypstWorker, destroyTypstWorker, compileTypst } from "./typst_worke
 import { updatePreview } from "./preview"
 
 function parseContent(content) {
-  if (!content) return ""
-  return content.replace(/\\n/g, "\n")
+  return content || ""
+}
+
+function parseJsonDataset(value, fallback) {
+  if (!value) return fallback
+  try {
+    return JSON.parse(value)
+  } catch (_error) {
+    return fallback
+  }
+}
+
+function editorOptions(element) {
+  return {
+    language: element.dataset.language || "typst",
+    project: {
+      sources: parseJsonDataset(element.dataset.projectSources, []),
+      assets: parseJsonDataset(element.dataset.projectAssets, [])
+    }
+  }
 }
 
 export const CodeMirror = {
@@ -13,6 +31,7 @@ export const CodeMirror = {
     const rawContent = this.el.dataset.content || ""
     const content = parseContent(rawContent)
     const fileId = this.el.dataset.fileId || null
+    const options = editorOptions(this.el)
 
     if (!container) return
 
@@ -22,7 +41,8 @@ export const CodeMirror = {
       container,
       content,
       this.liveSocket || window.liveSocket,
-      fileId
+      fileId,
+      options
     )
 
     this.handleEvent("content_updated", ({ content }) => {
@@ -31,9 +51,11 @@ export const CodeMirror = {
       }
     })
 
-    this.handleEvent("file_changed", ({ file_id, content }) => {
+    this.handleEvent("file_changed", ({ file_id, content, language }) => {
       const newFileId = file_id || null
       const newContent = parseContent(content || "")
+      const options = editorOptions(this.el)
+      options.language = language || options.language
 
       if (this.previousFileId !== newFileId) {
         this.previousFileId = newFileId
@@ -45,7 +67,8 @@ export const CodeMirror = {
           container,
           newContent,
           this.liveSocket || window.liveSocket,
-          newFileId
+          newFileId,
+          options
         )
         this.setupThemeHandlers()
       } else if (this.editorInstance) {
@@ -121,6 +144,7 @@ export const CodeMirror = {
     const rawContent = this.el.dataset.content || ""
     const newContent = parseContent(rawContent)
     const newFileId = this.el.dataset.fileId || null
+    const options = editorOptions(this.el)
 
     if (this.previousFileId === undefined) {
       this.previousFileId = newFileId
@@ -136,7 +160,8 @@ export const CodeMirror = {
           container,
           newContent,
           this.liveSocket || window.liveSocket,
-          newFileId
+          newFileId,
+          options
         )
         this.setupThemeHandlers()
       } else {
@@ -150,7 +175,8 @@ export const CodeMirror = {
         container,
         newContent,
         this.liveSocket || window.liveSocket,
-        newFileId
+        newFileId,
+        options
       )
       this.setupThemeHandlers()
     }
@@ -176,9 +202,11 @@ export const Preview = {
     const editorContainer = document.getElementById("editor-container")
     if (editorContainer) {
       const rawContent = editorContainer.dataset.content || ""
-      const content = rawContent.replace(/\\n/g, "\n")
-      if (content) {
-        setTimeout(() => compileTypst(content), 100)
+      const content = parseContent(rawContent)
+      const language = editorContainer.dataset.language || "typst"
+      const project = editorOptions(editorContainer).project
+      if (content && language === "typst") {
+        setTimeout(() => compileTypst(content, project), 100)
       }
     }
   },
