@@ -1,4 +1,8 @@
 defmodule Typster.Accounts.UserToken do
+  @moduledoc """
+  Database-backed tokens for sessions, magic links, and email change flows.
+  """
+
   use Ecto.Schema
   import Ecto.Query
   alias Typster.Accounts.UserToken

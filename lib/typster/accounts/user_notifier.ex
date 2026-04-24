@@ -1,4 +1,8 @@
 defmodule Typster.Accounts.UserNotifier do
+  @moduledoc """
+  Outbound email notifications for account login, confirmation, and email changes.
+  """
+
   import Swoosh.Email
 
   alias Typster.Mailer

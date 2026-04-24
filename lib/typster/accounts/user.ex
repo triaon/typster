@@ -1,4 +1,8 @@
 defmodule Typster.Accounts.User do
+  @moduledoc """
+  User account records used for authentication and project ownership.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -1,4 +1,8 @@
 defmodule TypsterWeb.UserAuth do
+  @moduledoc """
+  Session and request authentication helpers for browser and JSON API routes.
+  """
+
   use TypsterWeb, :verified_routes
 
   import Plug.Conn
