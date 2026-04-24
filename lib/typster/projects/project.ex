@@ -1,4 +1,5 @@
 defmodule Typster.Projects.Project do
+  @moduledoc "Schema for user-owned projects"
   use Ecto.Schema
   import Ecto.Changeset
 

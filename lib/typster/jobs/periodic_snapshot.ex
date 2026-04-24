@@ -1,4 +1,5 @@
 defmodule Typster.Jobs.PeriodicSnapshot do
+  @moduledoc "Oban job that snapshots file contents into file revisions"
   use Oban.Worker, queue: :default, max_attempts: 3
   import Ecto.Query
 

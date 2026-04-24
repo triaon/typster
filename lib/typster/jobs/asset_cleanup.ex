@@ -1,4 +1,5 @@
 defmodule Typster.Jobs.AssetCleanup do
+  @moduledoc "Oban job that deletes assets whose parent project no longer exists"
   use Oban.Worker, queue: :default, max_attempts: 3
 
   @impl Oban.Worker

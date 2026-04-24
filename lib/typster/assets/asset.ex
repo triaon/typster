@@ -1,4 +1,5 @@
 defmodule Typster.Assets.Asset do
+  @moduledoc "Schema for stored asset metadata and object references"
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -1,4 +1,5 @@
 defmodule Typster.Projects.File do
+  @moduledoc "Schema for project files, including parent-child file relationships"
   use Ecto.Schema
   import Ecto.Changeset
 
