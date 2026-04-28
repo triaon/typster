@@ -1,4 +1,5 @@
 defmodule Typster.Projects.FileRevision do
+  @moduledoc "Schema for immutable snapshots of file content over time"
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -15,7 +16,8 @@ defmodule Typster.Projects.FileRevision do
   @doc false
   def changeset(file_revision, attrs) do
     file_revision
-    |> cast(attrs, [:content, :sequence, :file_id, :inserted_at])
+    |> cast(attrs, [:content, :sequence])
     |> validate_required([:content, :sequence, :file_id, :inserted_at])
+    |> assoc_constraint(:file)
   end
 end

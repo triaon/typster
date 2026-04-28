@@ -16,14 +16,17 @@ export function initTypstWorker(hook) {
       worker.onmessage = (event) => {
         const { type, data } = event.data
 
-        if (type === "render") {
+      if (type === "render") {
           if (typeof pushEvent === "function") {
             pushEvent("update_preview", { svg: data.svg })
           } else {
             console.warn("pushEvent not available, preview won't update")
-          }
-        } else if (type === "error") {
-          console.error("Typst compilation error:", data)
+        }
+      } else if (type === "error") {
+        if (typeof pushEvent === "function") {
+          pushEvent("preview_error", { message: data.message || "Typst preview failed" })
+        }
+        console.error("Typst compilation error:", data)
         }
       }
 
@@ -41,7 +44,7 @@ export function initTypstWorker(hook) {
   }
 }
 
-export function compileTypst(content) {
+export function compileTypst(content, project = {}) {
   if (!worker) {
     const container = document.getElementById("preview-container")
     if (container) {
@@ -66,14 +69,16 @@ export function compileTypst(content) {
   if (worker && worker.readyState !== Worker.CLOSED) {
     worker.postMessage({
       type: "compile",
-      content: content
+      content: content,
+      project: project
     })
   } else if (!worker && previewContainer) {
     setTimeout(() => {
       if (worker && worker.readyState !== Worker.CLOSED) {
         worker.postMessage({
           type: "compile",
-          content: content
+          content: content,
+          project: project
         })
       }
     }, 100)

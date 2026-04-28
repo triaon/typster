@@ -1,4 +1,4 @@
-<Layouts.app flash={@flash}>
+<Layouts.app flash={@flash} current_scope={@current_scope}>
   <div class="container mx-auto px-4 py-8">
     <div class="mb-8">
       <.breadcrumb class="mb-4">
@@ -35,12 +35,12 @@
             <.card_title>Files</.card_title>
           </div>
           <span class="text-sm text-gray-600">
-            {length(@file_tree)} {if length(@file_tree) != 1, do: "file", else: "files"}
+            {length(@file_tree) + length(@assets)} entries
           </span>
         </div>
       </.card_header>
       <.card_content>
-        <%= if Enum.empty?(@file_tree) do %>
+        <%= if Enum.empty?(@file_tree) and Enum.empty?(@assets) do %>
           <div class="text-center py-12">
             <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
               <.icon name="hero-document" class="w-8 h-8 text-gray-400" />
@@ -51,7 +51,7 @@
             </p>
           </div>
         <% else %>
-          <div class="space-y-1">
+          <div id="project-files" class="space-y-1">
             <%= for file <- @file_tree do %>
               <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group">
                 <div class="flex items-center gap-3">
@@ -68,6 +68,23 @@
                 >
                   Delete
                 </button>
+              </div>
+            <% end %>
+            <%= for asset <- @assets do %>
+              <div
+                id={"asset-#{asset.id}"}
+                class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group"
+              >
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-md bg-gray-100 flex items-center justify-center">
+                    <.icon name="hero-photo" class="w-5 h-5 text-gray-600" />
+                  </div>
+                  <div>
+                    <span class="font-mono text-sm text-gray-900">{asset.filename}</span>
+                    <p class="font-mono text-xs text-gray-500">assets/{asset.filename}</p>
+                  </div>
+                </div>
+                <span class="text-xs text-gray-500">{asset.content_type}</span>
               </div>
             <% end %>
           </div>

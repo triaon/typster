@@ -1,4 +1,5 @@
 defmodule Typster.Assets.Asset do
+  @moduledoc "Schema for stored asset metadata and object references"
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -17,7 +18,7 @@ defmodule Typster.Assets.Asset do
   @doc false
   def changeset(asset, attrs) do
     asset
-    |> cast(attrs, [:object_key, :content_type, :size, :filename, :project_id, :inserted_at])
+    |> cast(attrs, [:object_key, :content_type, :size, :filename])
     |> validate_required([
       :object_key,
       :content_type,

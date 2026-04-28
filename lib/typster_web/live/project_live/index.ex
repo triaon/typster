@@ -9,7 +9,7 @@ defmodule TypsterWeb.ProjectLive.Index do
     {:ok,
      socket
      |> assign(:page_title, "Projects")
-     |> stream(:projects, Projects.list_projects())}
+     |> stream(:projects, Projects.list_projects(socket.assigns.current_scope))}
   end
 
   @impl true
@@ -21,7 +21,7 @@ defmodule TypsterWeb.ProjectLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Project")
-    |> assign(:project, Projects.get_project!(id))
+    |> assign(:project, Projects.get_project!(socket.assigns.current_scope, id))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -38,8 +38,8 @@ defmodule TypsterWeb.ProjectLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    project = Projects.get_project!(id)
-    {:ok, _} = Projects.delete_project(project)
+    project = Projects.get_project!(socket.assigns.current_scope, id)
+    {:ok, _} = Projects.delete_project(socket.assigns.current_scope, project)
 
     {:noreply, stream_delete(socket, :projects, project)}
   end
@@ -48,7 +48,7 @@ defmodule TypsterWeb.ProjectLive.Index do
   def handle_event("create_project", params, socket) do
     name = Map.get(params, "name", "New Project")
 
-    case Projects.create_project(%{name: name}) do
+    case Projects.create_project(socket.assigns.current_scope, %{name: name}) do
       {:ok, project} ->
         {:noreply, stream_insert(socket, :projects, project, at: -1)}
 

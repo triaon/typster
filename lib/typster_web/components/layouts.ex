@@ -46,6 +46,15 @@ defmodule TypsterWeb.Layouts do
           <li>
             <.link navigate={~p"/projects"} class="btn btn-ghost">Projects</.link>
           </li>
+          <li :if={@current_scope && @current_scope.user}>
+            <.link navigate={~p"/users/settings"} class="btn btn-ghost">Settings</.link>
+          </li>
+          <li :if={@current_scope && @current_scope.user}>
+            <.link href={~p"/users/log-out"} method="delete" class="btn btn-ghost">Log out</.link>
+          </li>
+          <li :if={!@current_scope || !@current_scope.user}>
+            <.link navigate={~p"/users/log-in"} class="btn btn-ghost">Log in</.link>
+          </li>
           <li>
             <.theme_toggle />
           </li>
