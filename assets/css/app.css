@@ -1074,6 +1074,9 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #15131f; }
   padding: 0;
 }
 .mk-theme-toggle svg { width: 16px; height: 16px; }
+.mk-icon-12 { width: 12px; height: 12px; }
+.mk-icon-14 { width: 14px; height: 14px; }
+.mk-icon-16 { width: 16px; height: 16px; }
 /* show moon in light mode (to indicate you can go dark), sun in dark mode */
 .mk-icon-sun  { display: none; }
 .mk-icon-moon { display: block; }

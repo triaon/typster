@@ -12,10 +12,10 @@
   <div class="mk-hero-ctas">
     <.link navigate={~p"/users/register"} class="mk-btn mk-btn-primary mk-btn-lg">
       Start writing — it's free
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      <.mk_icon name="arrow-right" class="mk-icon-14" />
     </.link>
     <a href="https://github.com/typster/typster" class="mk-btn mk-btn-outline mk-btn-lg">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.9 1.2 1.9 1.2 1.1 1.9 2.9 1.4 3.6 1 .1-.8.4-1.4.8-1.7-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.8.1 3.2.7.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 6 .4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+      <.mk_icon name="github" class="mk-icon-16" />
       Star on GitHub
     </a>
   </div>
@@ -37,24 +37,24 @@
       <aside class="mk-mock-side">
         <div class="mk-mock-side-h">Files</div>
         <div class="mk-mock-row active">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <.mk_icon name="file" class="mk-icon-12" />
           main.typ
         </div>
         <div class="mk-mock-row">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <.mk_icon name="file" class="mk-icon-12" />
           sections/intro.typ
         </div>
         <div class="mk-mock-row">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <.mk_icon name="file" class="mk-icon-12" />
           sections/data.typ
         </div>
         <div class="mk-mock-row">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <.mk_icon name="file" class="mk-icon-12" />
           refs.bib
         </div>
         <div class="mk-mock-side-h" style="margin-top:12px">Assets</div>
         <div class="mk-mock-row">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <.mk_icon name="image" class="mk-icon-12" />
           cover.png
         </div>
       </aside>
@@ -148,44 +148,32 @@
     <p class="mk-section-sub mk-reveal">Typst is the new TeX. Typster is the IDE that makes it feel inevitable.</p>
     <div class="mk-feat-grid mk-reveal-group">
       <div class="mk-feat">
-        <div class="mk-feat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        </div>
+        <div class="mk-feat-icon"><.mk_icon name="bolt" /></div>
         <h3>Compile in milliseconds</h3>
         <p>Edge-rendered Typst compilation. Save → see the PDF before your finger leaves ⌘S.</p>
       </div>
       <div class="mk-feat">
-        <div class="mk-feat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
-        </div>
+        <div class="mk-feat-icon"><.mk_icon name="command" /></div>
         <h3>Keyboard-first</h3>
         <p>Every action sits behind ⌘⇧P. New file, save, search, switch project — never reach for the mouse.</p>
       </div>
       <div class="mk-feat">
-        <div class="mk-feat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
-        </div>
+        <div class="mk-feat-icon"><.mk_icon name="eye" /></div>
         <h3>Live three-pane layout</h3>
         <p>Files · source · preview, all on screen at once. Resizable handles, persistent layout.</p>
       </div>
       <div class="mk-feat">
-        <div class="mk-feat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 1 0 0-9h-1.8a7 7 0 1 0-13.4 4"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>
-        </div>
+        <div class="mk-feat-icon"><.mk_icon name="cloud-upload" /></div>
         <h3>Cloud projects</h3>
         <p>Auto-saved to the cloud. Works on every device, no install, no setup required.</p>
       </div>
       <div class="mk-feat">
-        <div class="mk-feat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        </div>
+        <div class="mk-feat-icon"><.mk_icon name="share" /></div>
         <h3>Shareable links</h3>
         <p>Send a read-only link. Recipients open the PDF in-browser, no account needed.</p>
       </div>
       <div class="mk-feat">
-        <div class="mk-feat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
-        </div>
+        <div class="mk-feat-icon"><.mk_icon name="font" /></div>
         <h3>Bring your fonts</h3>
         <p>Upload TTF/OTF assets per project. Typst reads them on every compile, exactly as authored.</p>
       </div>
@@ -505,7 +493,7 @@
   <p>Join 2,400 writers already using Typster. Free forever, no credit card required.</p>
   <.link navigate={~p"/users/register"} class="mk-btn mk-btn-light mk-btn-lg">
     Create your free account
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    <.mk_icon name="arrow-right" class="mk-icon-14" />
   </.link>
 </section>
 
