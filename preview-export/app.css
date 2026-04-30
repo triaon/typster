@@ -4276,6 +4276,18 @@ html[data-theme="dark"] {
   width: 16px;
   height: 16px;
 }
+.mk-icon-12 {
+  width: 12px;
+  height: 12px;
+}
+.mk-icon-14 {
+  width: 14px;
+  height: 14px;
+}
+.mk-icon-16 {
+  width: 16px;
+  height: 16px;
+}
 .mk-icon-sun {
   display: none;
 }
