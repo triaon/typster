@@ -53,6 +53,44 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+// ── Nav scroll state ─────────────────────────────────────────────────────
+(function initNav() {
+  const nav = document.querySelector('.mk-nav');
+  if (!nav) return;
+  const update = () => nav.classList.toggle('is-scrolled', window.scrollY > 16);
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+// ── Marketing page animations ────────────────────────────────────────────
+(function initMotion() {
+  if (!('IntersectionObserver' in window)) return;
+
+  // Enable motion styles only when JS is available (progressive enhancement)
+  document.body.classList.add('js-motion');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  // Observe individual reveal elements
+  document.querySelectorAll('.mk-reveal').forEach(el => observer.observe(el));
+
+  // Observe staggered groups
+  document.querySelectorAll('.mk-reveal-group').forEach(el => {
+    // Assign --i CSS variable to each child for stagger delay
+    Array.from(el.children).forEach((child, i) => {
+      child.style.setProperty('--i', i);
+    });
+    observer.observe(el);
+  });
+})();
+
 // The lines below enable quality of life phoenix_live_reload
 // development features:
 //
