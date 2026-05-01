@@ -2,8 +2,12 @@
    https://tailwindcss.com/docs/configuration */
 
 @import "tailwindcss" source(none);
+/* v1 font — kept for the default landing look */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+/* v2 font — display serif paired with Inter, used by landing_v2.css */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
 @import "./salad_ui.css";
+@import "./landing_v2.css";
 @source "../css";
 @source "../js";
 @source "../../lib/typster_web";

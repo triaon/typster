@@ -27,6 +27,25 @@
         }
         window.addEventListener("storage", (e) => e.key === "phx:theme" && setTheme(e.newValue || "system"));
         window.addEventListener("phx:set-theme", (e) => setTheme(e.target.dataset.phxTheme));
+
+        // Landing redesign A/B toggle — see assets/css/landing_v2.css
+        const setRedesign = (v) => {
+          if (v === "v2") {
+            localStorage.setItem("phx:redesign", "v2");
+            document.documentElement.setAttribute("data-redesign", "v2");
+          } else {
+            localStorage.removeItem("phx:redesign");
+            document.documentElement.removeAttribute("data-redesign");
+          }
+        };
+        if (!document.documentElement.hasAttribute("data-redesign")) {
+          setRedesign(localStorage.getItem("phx:redesign") || "v1");
+        }
+        window.addEventListener("storage", (e) => e.key === "phx:redesign" && setRedesign(e.newValue || "v1"));
+        window.toggleMkRedesign = () => {
+          const cur = document.documentElement.getAttribute("data-redesign") === "v2" ? "v2" : "v1";
+          setRedesign(cur === "v2" ? "v1" : "v2");
+        };
         window.mkSwitchTab = function(btn) {
           const key = btn.dataset.tab;
           document.querySelectorAll('.mk-demo-tab').forEach(t => t.classList.toggle('is-active', t === btn));
@@ -67,6 +86,12 @@
         <a href="https://typst.app/docs" target="_blank">Docs</a>
       </nav>
       <div class="mk-nav-cta">
+        <button
+          class="mk-btn mk-btn-ghost mk-btn-sm mk-redesign-toggle"
+          onclick="toggleMkRedesign(this)"
+          aria-label="Toggle landing redesign"
+          title="Switch between landing v1 and v2"
+        ></button>
         <button class="mk-btn mk-btn-ghost mk-btn-sm mk-theme-toggle" onclick="toggleMkTheme(this)" aria-label="Toggle theme">
           <i data-lucide="moon" class="mk-icon-moon"></i>
           <i data-lucide="sun" class="mk-icon-sun"></i>
