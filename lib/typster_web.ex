@@ -86,7 +86,6 @@ defmodule TypsterWeb do
       import Phoenix.HTML
       # Core UI components
       import TypsterWeb.CoreComponents
-      import TypsterWeb.MarketingIcons
 
       # Import SaladUI components
       import TypsterWeb.Components.UI.Card

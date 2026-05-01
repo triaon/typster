@@ -68,8 +68,8 @@
       </nav>
       <div class="mk-nav-cta">
         <button class="mk-btn mk-btn-ghost mk-btn-sm mk-theme-toggle" onclick="toggleMkTheme(this)" aria-label="Toggle theme">
-          <.mk_icon name="moon" class="mk-icon-moon" />
-          <.mk_icon name="sun" class="mk-icon-sun" />
+          <i data-lucide="moon" class="mk-icon-moon"></i>
+          <i data-lucide="sun" class="mk-icon-sun"></i>
         </button>
         <%= if @current_scope do %>
           <a href={~p"/projects"} class="mk-btn mk-btn-ghost mk-btn-sm">My projects</a>
