@@ -3,6 +3,6 @@ defmodule TypsterWeb.PageControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")
-    assert html_response(conn, 200) =~ "A modern web-based Typst editor"
+    assert html_response(conn, 200) =~ "Write Typst."
   end
 end

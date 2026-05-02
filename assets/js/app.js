@@ -18,6 +18,8 @@
 // To load it, simply add a second `<link>` to your `root.html.heex` file.
 
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
+import { createIcons, ArrowRight, BookText, ChartNoAxesColumn, CloudUpload, Command, Eye, File, FileInput, FileText, GraduationCap, Image, Moon, NotebookPen, PenLine, ReceiptText, Share2, Sparkles, Sun, Type, Users, Zap } from "lucide"
+import { siGithub } from "simple-icons"
 import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
 import {Socket} from "phoenix"
@@ -52,6 +54,48 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
+
+const Github = [["path", { d: siGithub.path, fill: "currentColor", stroke: "none" }]]
+
+createIcons({ icons: { ArrowRight, BookText, ChartNoAxesColumn, CloudUpload, Command, Eye, File, FileInput, FileText, GraduationCap, Image, Moon, NotebookPen, PenLine, ReceiptText, Share2, Sparkles, Sun, Type, Users, Zap, Github } })
+
+// ── Nav scroll state ─────────────────────────────────────────────────────
+(function initNav() {
+  const nav = document.querySelector('.mk-nav');
+  if (!nav) return;
+  const update = () => nav.classList.toggle('is-scrolled', window.scrollY > 16);
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+// ── Marketing page animations ────────────────────────────────────────────
+(function initMotion() {
+  if (!('IntersectionObserver' in window)) return;
+
+  // Enable motion styles only when JS is available (progressive enhancement)
+  document.body.classList.add('js-motion');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  // Observe individual reveal elements
+  document.querySelectorAll('.mk-reveal').forEach(el => observer.observe(el));
+
+  // Observe staggered groups
+  document.querySelectorAll('.mk-reveal-group').forEach(el => {
+    // Assign --i CSS variable to each child for stagger delay
+    Array.from(el.children).forEach((child, i) => {
+      child.style.setProperty('--i', i);
+    });
+    observer.observe(el);
+  });
+})();
 
 // The lines below enable quality of life phoenix_live_reload
 // development features:

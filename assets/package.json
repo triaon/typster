@@ -12,6 +12,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "lucide": "^1.14.0",
+    "simple-icons": "^14.0.0",
     "@codemirror/commands": "^6.10.1",
     "@codemirror/lang-lezer": "^6.0.2",
     "@codemirror/lang-markdown": "^6.5.0",
