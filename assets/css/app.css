@@ -2,12 +2,9 @@
    https://tailwindcss.com/docs/configuration */
 
 @import "tailwindcss" source(none);
-/* v1 font — kept for the default landing look */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-/* v2 font — display serif paired with Inter, used by landing_v2.css */
 @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
 @import "./salad_ui.css";
-@import "./landing_v2.css";
 @source "../css";
 @source "../js";
 @source "../../lib/typster_web";
@@ -146,8 +143,12 @@
   --mk-bd2: #f4f4f5;
   --mk-bg: #ffffff;
   --mk-bg2: #fafafa;
-  --mk-r: 0.5rem;
-  --mk-r-sm: 0.375rem;
+  --mk-r: 0.75rem;
+  --mk-r-sm: 0.5rem;
+  --mk-r-lg: 1rem;
+  --mk-acc: #c4b5fd;
+  --mk-acc-h: #a78bfa;
+  --mk-acc-50: #f5f3ff;
   --mk-sh-sm: 0 1px 2px rgba(0,0,0,.05), 0 1px 3px rgba(0,0,0,.06);
   --mk-sh-md: 0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -2px rgba(0,0,0,.05);
   --mk-sh-lg: 0 10px 15px -3px rgba(0,0,0,.08), 0 4px 6px -4px rgba(0,0,0,.05);
@@ -160,7 +161,7 @@
 /* body */
 html, body { overscroll-behavior: none; }
 html { color-scheme: light; background-color: #eef0f4; }
-html[data-theme="dark"] { color-scheme: dark; background-color: #15131f; }
+html[data-theme="dark"] { color-scheme: dark; background-color: #0c0a14; }
 
 .mk-body {
   margin: 0;
@@ -171,7 +172,7 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #15131f; }
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-[data-theme="dark"] .mk-body { background-color: #15131f; }
+[data-theme="dark"] .mk-body { background-color: #0c0a14; }
 
 .mk-body::after {
   content: '';
@@ -354,11 +355,11 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #15131f; }
   gap: 8px;
   padding: 5px 14px;
   border-radius: 9999px;
-  background: var(--mk-pri-50);
+  background: var(--mk-acc-50);
   color: var(--mk-pri-h);
   font: 500 12px 'Inter', sans-serif;
   margin-bottom: 28px;
-  border: 1px solid var(--mk-pri-100);
+  border: 1px solid var(--mk-acc);
   letter-spacing: .01em;
 }
 .mk-pill-dot {
@@ -369,19 +370,26 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #15131f; }
   flex-shrink: 0;
 }
 .mk-hero h1 {
-  font: 700 60px/1.04 'Inter', sans-serif;
-  letter-spacing: -.04em;
+  font: 700 clamp(40px, 5.5vw, 76px)/1.02 'Inter', sans-serif;
+  letter-spacing: -0.025em;
   margin: 0 0 20px;
-  max-width: 820px;
+  max-width: 880px;
   margin-inline: auto;
   text-wrap: balance;
   color: var(--mk-fg);
 }
-.mk-hero h1 em { font-style: normal; color: var(--mk-pri); }
+.mk-hero h1 em {
+  font-family: 'Instrument Serif', 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--mk-pri);
+  vertical-align: -0.02em;
+}
 .mk-hero-sub {
-  font: 18px/1.62 'Inter', sans-serif;
+  font: 17px/1.62 'Inter', sans-serif;
   color: var(--mk-fg3);
-  max-width: 560px;
+  max-width: 600px;
   margin: 0 auto 38px;
   text-wrap: pretty;
 }
@@ -409,6 +417,7 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #15131f; }
   height: 500px;
   font: 12.5px/20px 'JetBrains Mono', monospace;
   background: var(--mk-bg);
+  border-radius: var(--mk-r-lg);
 }
 .mk-mock-bar {
   grid-column: 1 / -1;
@@ -646,8 +655,8 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #15131f; }
   position: relative;
 }
 .mk-price-featured {
-  border-color: var(--mk-pri);
-  box-shadow: 0 0 0 1px var(--mk-pri), var(--mk-sh-lg);
+  border-color: var(--mk-acc);
+  box-shadow: 0 0 0 1px var(--mk-acc), var(--mk-sh-lg);
 }
 .mk-price-pop {
   position: absolute;
@@ -728,6 +737,7 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #15131f; }
   padding: 88px 28px;
   text-align: center;
   color: #fff;
+  border-radius: var(--mk-r-lg);
 }
 .mk-cta-band h2 {
   font: 700 40px/1.1 'Inter', sans-serif;
@@ -885,7 +895,6 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #15131f; }
 
 /* responsive — tablet */
 @media (max-width: 900px) {
-  .mk-hero h1 { font-size: 40px; }
   .mk-feat-grid { grid-template-columns: 1fr; }
   .mk-price-grid { grid-template-columns: 1fr; max-width: 480px; }
   .mk-kb-grid { grid-template-columns: 1fr; }
@@ -904,12 +913,15 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #15131f; }
   .mk-stats { padding: 40px 20px; }
 }
 
+@media (max-width: 720px) {
+  .mk-hero h1 { font-size: clamp(32px, 9vw, 44px); letter-spacing: -0.03em; }
+}
+
 /* responsive — mobile */
 @media (max-width: 480px) {
   /* hero: keep extra top padding to clear sticky nav (margin-top: -64px) */
   .mk-hero { padding: 96px 16px 48px; }
   .mk-nav { top: 8px; width: calc(100% - 16px); height: 52px; padding: 0 10px 0 14px; border-radius: 14px; }
-  .mk-hero h1 { font-size: 28px; letter-spacing: -.03em; }
   .mk-hero-sub { font-size: 15px; }
   .mk-hero-ctas { flex-direction: column; align-items: center; }
   .mk-hero-ctas .mk-btn { width: 100%; max-width: 300px; justify-content: center; }
@@ -1079,6 +1091,9 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #15131f; }
   --mk-pri-h: #a5b4fc;
   --mk-pri-50: rgba(99,102,241,.22);
   --mk-pri-100: rgba(129,140,248,.40);
+  --mk-acc: #a78bfa;
+  --mk-acc-h: #8b5cf6;
+  --mk-acc-50: rgba(167, 139, 250, 0.12);
   --mk-sh-md: 0 4px 6px -1px rgba(0,0,0,.5), 0 2px 4px -2px rgba(0,0,0,.35);
   --mk-sh-2xl: 0 25px 50px -12px rgba(0,0,0,.75);
 }
