@@ -4,7 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title default="Typster — The Typst editor for writing that ships" suffix=" · Typster">
+    <.live_title
+      default="Typster — The Typst editor for writing that lands"
+      suffix=" · Typster"
+    >
       {assigns[:page_title]}
     </.live_title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -91,8 +94,13 @@
           onclick="toggleMkRedesign(this)"
           aria-label="Toggle landing redesign"
           title="Switch between landing v1 and v2"
-        ></button>
-        <button class="mk-btn mk-btn-ghost mk-btn-sm mk-theme-toggle" onclick="toggleMkTheme(this)" aria-label="Toggle theme">
+        >
+        </button>
+        <button
+          class="mk-btn mk-btn-ghost mk-btn-sm mk-theme-toggle"
+          onclick="toggleMkTheme(this)"
+          aria-label="Toggle theme"
+        >
           <i data-lucide="moon" class="mk-icon-moon"></i>
           <i data-lucide="sun" class="mk-icon-sun"></i>
         </button>
@@ -103,7 +111,9 @@
           </.link>
         <% else %>
           <.link href={~p"/users/log-in"} class="mk-btn mk-btn-ghost mk-btn-sm">Log in</.link>
-          <.link href={~p"/users/register"} class="mk-btn mk-btn-primary mk-btn-sm">Sign up free</.link>
+          <.link href={~p"/users/register"} class="mk-btn mk-btn-primary mk-btn-sm">
+            Sign up free
+          </.link>
         <% end %>
       </div>
     </header>

@@ -1044,7 +1044,17 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #15131f; }
 @media (hover: hover) and (pointer: fine) {
   .mk-usecase:hover { box-shadow: var(--mk-sh-md); transform: translateY(-2px); }
 }
-.mk-usecase-icon { font-size: 24px; margin-bottom: 14px; line-height: 1; }
+.mk-usecase-icon {
+  display: inline-flex;
+  margin-bottom: 14px;
+  color: var(--mk-accent);
+  line-height: 1;
+}
+.mk-usecase-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 1.8;
+}
 .mk-usecase h3 { font: 600 14px 'Inter', sans-serif; color: var(--mk-fg); margin: 0 0 8px; }
 .mk-usecase p { font: 13px/1.6 'Inter', sans-serif; color: var(--mk-fg3); margin: 0; }
 

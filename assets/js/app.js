@@ -18,7 +18,7 @@
 // To load it, simply add a second `<link>` to your `root.html.heex` file.
 
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
-import { createIcons, ArrowRight, BookText, CloudUpload, Command, Eye, File, FileInput, Image, Moon, PenLine, Share2, Sparkles, Sun, Type, Users, Zap } from "lucide"
+import { createIcons, ArrowRight, BookText, ChartNoAxesColumn, CloudUpload, Command, Eye, File, FileInput, FileText, GraduationCap, Image, Moon, NotebookPen, PenLine, ReceiptText, Share2, Sparkles, Sun, Type, Users, Zap } from "lucide"
 import { siGithub } from "simple-icons"
 import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
@@ -57,7 +57,7 @@ window.liveSocket = liveSocket
 
 const Github = [["path", { d: siGithub.path, fill: "currentColor", stroke: "none" }]]
 
-createIcons({ icons: { ArrowRight, BookText, CloudUpload, Command, Eye, File, FileInput, Image, Moon, PenLine, Share2, Sparkles, Sun, Type, Users, Zap, Github } })
+createIcons({ icons: { ArrowRight, BookText, ChartNoAxesColumn, CloudUpload, Command, Eye, File, FileInput, FileText, GraduationCap, Image, Moon, NotebookPen, PenLine, ReceiptText, Share2, Sparkles, Sun, Type, Users, Zap, Github } })
 
 // ── Nav scroll state ─────────────────────────────────────────────────────
 (function initNav() {
