@@ -16,9 +16,11 @@ defmodule TypsterWeb.UserLive.Login do
         <% end %>
       </p>
 
-      <div :if={local_mail_adapter?()} class="auth-info">
-        <.icon name="hero-information-circle" class="size-4 shrink-0 mt-0.5" />
-        <div>
+      <div :if={local_mail_adapter?()} class="mk-alert mk-alert-info">
+        <span class="mk-alert-icon">
+          <.icon name="hero-information-circle" class="size-4" />
+        </span>
+        <div class="mk-alert-body">
           Local mail adapter is active.
           View sent emails in <.link href="/dev/mailbox">the mailbox</.link>.
         </div>

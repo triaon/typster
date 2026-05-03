@@ -676,20 +676,6 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #0c0a14; }
 .mk-feat h3 { font: 600 15px 'Inter', sans-serif; margin: 0 0 8px; color: var(--mk-fg); }
 .mk-feat p { font: 14px/1.62 'Inter', sans-serif; color: var(--mk-fg3); margin: 0; }
 
-/* Roadmap "Soon"/"Later" tag — appears inside .mk-feat h3 in the roadmap section */
-.mk-roadmap-tag {
-  display: inline-block;
-  font: 500 10px/1 'Inter', sans-serif;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--mk-pri);
-  background: var(--mk-pri-50);
-  border: 1px solid var(--mk-pri-100);
-  padding: 3px 7px;
-  border-radius: 4px;
-  margin-left: 8px;
-  vertical-align: 0.15em;
-}
 
 /* keyboard band */
 .mk-kb-band {
@@ -1444,27 +1430,9 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #0c0a14; }
 .auth-divider::before,
 .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--mk-bd); }
 
-/* Auth info alert */
-.auth-info {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  padding: 12px 14px;
-  background: var(--mk-pri-50);
-  border: 1px solid var(--mk-pri-100);
-  border-radius: var(--mk-r-sm);
-  font-size: 13px;
-  color: var(--mk-fg2);
-  margin-bottom: 18px;
-  line-height: 1.5;
-}
-
-[data-theme="dark"] .auth-info {
-  background: rgba(99,102,241,.08);
-  border-color: rgba(99,102,241,.2);
-}
-
-.auth-info a { color: var(--mk-pri); text-decoration: underline; }
+/* Auth info alert — uses .mk-alert.mk-alert-info */
+.mk-alert { margin-bottom: 18px; }
+.mk-alert a { color: currentColor; text-decoration: underline; }
 
 /* Auth buttons */
 .auth-card .mk-btn { width: 100%; justify-content: center; }
