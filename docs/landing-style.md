@@ -17,6 +17,10 @@ the toggle button.
 <html data-theme="dark">
 ```
 
+Both `:root` and `[data-theme="dark"]` define all `--mk-*` color/shadow
+tokens, so any component using those variables gets dark-mode adaptation
+automatically without per-component overrides.
+
 ## Color tokens
 
 Defined as CSS custom properties on `:root` (light) and overridden under

@@ -44,7 +44,7 @@ const liveSocket = new LiveSocket("/live", Socket, {
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
-window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
+window.addEventListener("phx:page-loading-stop", () => { topbar.hide(); mkIcons(); })
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()
@@ -56,8 +56,38 @@ liveSocket.connect()
 window.liveSocket = liveSocket
 
 const Github = [["path", { d: siGithub.path, fill: "currentColor", stroke: "none" }]]
+const mkIconSet = { ArrowRight, BookText, ChartNoAxesColumn, CloudUpload, Command, Eye, File, FileInput, FileText, GraduationCap, Image, Moon, NotebookPen, PenLine, ReceiptText, Share2, Sparkles, Sun, Type, Users, Zap, Github }
+const mkIcons = () => createIcons({ icons: mkIconSet })
+mkIcons()
 
-createIcons({ icons: { ArrowRight, BookText, ChartNoAxesColumn, CloudUpload, Command, Eye, File, FileInput, FileText, GraduationCap, Image, Moon, NotebookPen, PenLine, ReceiptText, Share2, Sparkles, Sun, Type, Users, Zap, Github } })
+// ── Theme toggle (view-transition circular reveal) ────────────────────────
+window.toggleMkTheme = (btn) => {
+  const cur = document.documentElement.getAttribute("data-theme")
+    ?? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  const next = cur === "dark" ? "light" : "dark";
+
+  const apply = () => {
+    localStorage.setItem("phx:theme", next);
+    document.documentElement.setAttribute("data-theme", next);
+  };
+
+  if (!document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    apply(); return;
+  }
+
+  const r = btn.getBoundingClientRect();
+  const x = r.left + r.width / 2;
+  const y = r.top + r.height / 2;
+  const endRadius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+
+  const t = document.startViewTransition(apply);
+  t.ready.then(() => {
+    document.documentElement.animate(
+      { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`] },
+      { duration: 480, easing: "cubic-bezier(.4,0,.2,1)", pseudoElement: "::view-transition-new(root)" }
+    );
+  });
+};
 
 // ── Nav scroll state ─────────────────────────────────────────────────────
 (function initNav() {
