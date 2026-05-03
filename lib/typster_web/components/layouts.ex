@@ -26,61 +26,7 @@ defmodule TypsterWeb.Layouts do
   def auth(assigns) do
     ~H"""
     <div class="mk-body auth-page">
-      <header class="mk-nav">
-        <a href={~p"/"} class="mk-brand">
-          <div class="mk-brand-mark">T</div>
-          <span>Typster</span>
-        </a>
-        <div class="mk-nav-cta">
-          <button
-            class="mk-btn mk-btn-ghost mk-btn-sm mk-theme-toggle"
-            onclick="toggleMkTheme(this)"
-            aria-label="Toggle theme"
-          >
-            <svg
-              class="mk-icon-moon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-            </svg>
-            <svg
-              class="mk-icon-sun"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-            </svg>
-          </button>
-          <%= if @current_scope && @current_scope.user do %>
-            <a href={~p"/projects"} class="mk-btn mk-btn-ghost mk-btn-sm">My projects</a>
-            <.link href={~p"/users/log-out"} method="delete" class="mk-btn mk-btn-ghost mk-btn-sm">
-              Log out
-            </.link>
-          <% else %>
-            <.link href={~p"/users/log-in"} class="mk-btn mk-btn-ghost mk-btn-sm">Log in</.link>
-            <.link href={~p"/users/register"} class="mk-btn mk-btn-primary mk-btn-sm">
-              Sign up free
-            </.link>
-          <% end %>
-        </div>
-      </header>
+      <.mk_nav current_scope={@current_scope} />
       <main class="auth-main">
         <div class="auth-card">
           {render_slot(@inner_block)}
@@ -88,6 +34,76 @@ defmodule TypsterWeb.Layouts do
       </main>
       <.flash_group flash={@flash} />
     </div>
+    """
+  end
+
+  @doc """
+  Shared floating nav used by both the marketing layout and the auth layout.
+  Pass a `:nav_links` slot to render the section-link bar (marketing only).
+  """
+  attr :current_scope, :map, default: nil
+  slot :nav_links
+
+  def mk_nav(assigns) do
+    ~H"""
+    <header class="mk-nav">
+      <a href={~p"/"} class="mk-brand">
+        <div class="mk-brand-mark">T</div>
+        <span>Typster</span>
+      </a>
+      <nav :if={@nav_links != []} class="mk-nav-links">
+        {render_slot(@nav_links)}
+      </nav>
+      <div class="mk-nav-cta">
+        <button
+          class="mk-btn mk-btn-ghost mk-btn-sm mk-theme-toggle"
+          onclick="toggleMkTheme(this)"
+          aria-label="Toggle theme"
+        >
+          <svg
+            class="mk-icon-moon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          <svg
+            class="mk-icon-sun"
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+          </svg>
+        </button>
+        <%= if @current_scope && @current_scope.user do %>
+          <a href={~p"/projects"} class="mk-btn mk-btn-ghost mk-btn-sm">My projects</a>
+          <.link href={~p"/users/log-out"} method="delete" class="mk-btn mk-btn-ghost mk-btn-sm">
+            Log out
+          </.link>
+        <% else %>
+          <.link href={~p"/users/log-in"} class="mk-btn mk-btn-ghost mk-btn-sm">Log in</.link>
+          <.link href={~p"/users/register"} class="mk-btn mk-btn-primary mk-btn-sm">
+            Sign up free
+          </.link>
+        <% end %>
+      </div>
+    </header>
     """
   end
 
