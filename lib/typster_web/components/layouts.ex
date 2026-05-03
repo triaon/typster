@@ -160,11 +160,11 @@ defmodule TypsterWeb.Layouts do
       <.flash_group flash={@flash} />
   """
   attr :flash, :map, required: true, doc: "the map of flash messages"
-  attr :id, :string, default: "flash-group", doc: "the optional id of flash container"
+  attr :id, :string, default: "mk-toast-stack", doc: "the optional id of flash container"
 
   def flash_group(assigns) do
     ~H"""
-    <div id={@id} aria-live="polite">
+    <div id={@id} class="mk-toast-stack" aria-live="polite" aria-atomic="false">
       <.flash kind={:info} flash={@flash} />
       <.flash kind={:error} flash={@flash} />
 

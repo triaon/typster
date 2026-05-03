@@ -1470,13 +1470,28 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #0c0a14; }
 }
 
 /* Badge variants */
-.mk-badge-default { background: var(--mk-bd2);     color: var(--mk-fg3);      border-color: var(--mk-bd); }
-.mk-badge-primary { background: var(--mk-pri-50);  color: var(--mk-pri);      border-color: var(--mk-pri-100); }
-.mk-badge-accent  { background: var(--mk-acc-50);  color: var(--mk-pri-h);    border-color: var(--mk-acc); }
-.mk-badge-success { background: var(--mk-success-50); color: var(--mk-success); border-color: var(--mk-success-bd); }
-.mk-badge-warning { background: var(--mk-warning-50); color: var(--mk-warning); border-color: var(--mk-warning-bd); }
-.mk-badge-error   { background: var(--mk-error-50);   color: var(--mk-error);   border-color: var(--mk-error-bd); }
-.mk-badge-info    { background: var(--mk-info-50);    color: var(--mk-info);    border-color: var(--mk-info-bd); }
+/* Soft variants — light bg, colored text, colored border */
+.mk-badge-default { background: var(--mk-bd2);        color: var(--mk-fg3);    border-color: var(--mk-bd); }
+.mk-badge-primary { background: var(--mk-pri-50);     color: var(--mk-pri);    border-color: var(--mk-pri-100); }
+.mk-badge-accent  { background: var(--mk-acc-50);     color: var(--mk-pri-h);  border-color: var(--mk-acc); }
+.mk-badge-success { background: var(--mk-success-50); color: var(--mk-success-h); border-color: var(--mk-success-bd); }
+.mk-badge-warning { background: var(--mk-warning-50); color: var(--mk-warning-h); border-color: var(--mk-warning-bd); }
+.mk-badge-error   { background: var(--mk-error-50);   color: var(--mk-error-h);   border-color: var(--mk-error-bd); }
+.mk-badge-info    { background: var(--mk-info-50);    color: var(--mk-info-h);    border-color: var(--mk-info-bd); }
+[data-theme="dark"] .mk-badge-success { color: var(--mk-success); }
+[data-theme="dark"] .mk-badge-warning { color: var(--mk-warning); }
+[data-theme="dark"] .mk-badge-error   { color: var(--mk-error); }
+[data-theme="dark"] .mk-badge-info    { color: var(--mk-info); }
+
+/* Solid variants — filled background, white text */
+.mk-badge-solid { font-weight: 600; border-color: transparent; }
+.mk-badge-solid.mk-badge-default { background: var(--mk-fg); color: var(--mk-bg); }
+.mk-badge-solid.mk-badge-success { background: var(--mk-success); color: #fff; }
+.mk-badge-solid.mk-badge-warning { background: var(--mk-warning); color: #fff; }
+.mk-badge-solid.mk-badge-error   { background: var(--mk-error);   color: #fff; }
+.mk-badge-solid.mk-badge-info    { background: var(--mk-info);    color: #fff; }
+[data-theme="dark"] .mk-badge-solid.mk-badge-warning { color: #18181b; }
+[data-theme="dark"] .mk-badge-solid.mk-badge-default { background: var(--mk-fg); color: var(--mk-bg); }
 
 
 /* ── Inline alert ───────────────────────────────────────────────────────── */
@@ -1530,17 +1545,11 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #0c0a14; }
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 12px 14px;
   border-radius: var(--mk-r);
-  border: 1px solid rgba(255,255,255,.18);
-  border-left-width: 1px;
-  background: rgba(255,255,255,.78);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.7) inset,
-    0 8px 24px -4px rgba(15,12,40,.16),
-    0 2px 8px -2px rgba(15,12,40,.10);
+  border: 1px solid var(--mk-bd);
+  background: var(--mk-bg);
+  box-shadow: var(--mk-sh-md);
   pointer-events: all;
   position: relative;
   overflow: hidden;
@@ -1550,20 +1559,36 @@ html[data-theme="dark"] { color-scheme: dark; background-color: #0c0a14; }
   animation: mkToastOut 0.22s var(--mk-ease-in-out) both;
 }
 [data-theme="dark"] .mk-toast {
-  background: rgba(20,18,32,.84);
-  border-color: rgba(255,255,255,.08);
+  background: rgba(20,18,32,.96);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   box-shadow:
     0 1px 0 rgba(255,255,255,.06) inset,
     0 8px 24px -4px rgba(0,0,0,.55),
     0 2px 8px -2px rgba(0,0,0,.35);
 }
 
-/* Semantic left-border accent */
-.mk-toast-success { border-left: 3px solid var(--mk-success); }
-.mk-toast-warning { border-left: 3px solid var(--mk-warning); }
-.mk-toast-error   { border-left: 3px solid var(--mk-error); }
-.mk-toast-info    { border-left: 3px solid var(--mk-info); }
+/* Semantic full-border color per variant */
+.mk-toast-success { border-color: var(--mk-success-bd); }
+.mk-toast-warning { border-color: var(--mk-warning-bd); }
+.mk-toast-error   { border-color: var(--mk-error-bd); }
+.mk-toast-info    { border-color: var(--mk-info-bd); }
 
+/* 8px status dot — used by Phoenix flash messages */
+.mk-toast-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+  background: var(--mk-fg3);
+}
+.mk-toast-success .mk-toast-dot { background: var(--mk-success); }
+.mk-toast-warning .mk-toast-dot { background: var(--mk-warning); }
+.mk-toast-error   .mk-toast-dot { background: var(--mk-error); }
+.mk-toast-info    .mk-toast-dot { background: var(--mk-info); }
+
+/* SVG icon container — used by mkToast() JS API */
 .mk-toast-icon {
   flex-shrink: 0;
   width: 20px;

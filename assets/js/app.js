@@ -141,7 +141,11 @@ window.toggleMkTheme = (btn) => {
   let stack = null;
   const getStack = () => {
     if (!stack) {
+      stack = document.getElementById('mk-toast-stack');
+    }
+    if (!stack) {
       stack = document.createElement('div');
+      stack.id = 'mk-toast-stack';
       stack.className = 'mk-toast-stack';
       stack.setAttribute('aria-live', 'polite');
       stack.setAttribute('aria-atomic', 'false');
@@ -168,6 +172,7 @@ window.toggleMkTheme = (btn) => {
     const el = document.createElement('div');
     el.className = `mk-toast mk-toast-${type}`;
     el.setAttribute('role', 'status');
+    const icon = ICONS[type] ?? ICONS.default;
     el.innerHTML = `
       <span class="mk-toast-icon">${icon}</span>
       <div class="mk-toast-body">${titleHtml}<p class="mk-toast-msg">${message}</p></div>
