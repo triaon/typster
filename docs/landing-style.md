@@ -153,6 +153,104 @@ flag, brand-tinted border, and bolder shadow.
 Native `<details>` accordion, custom `+`/`−` icon, hairline borders,
 generous vertical padding.
 
+### Badge / Status chip (`.mk-badge`)
+
+Small inline status label. Pill-shaped by default.
+
+```html
+<span class="mk-badge mk-badge-success">
+  <span class="mk-badge-dot"></span> Published
+</span>
+```
+
+- **Base:** `.mk-badge` — pill, `11px`, 500 weight, 1px border.
+- **Sizes:** `.mk-badge-sm` (10px), `.mk-badge-lg` (12px).
+- **`.mk-badge-dot`** — 5px dot in `currentColor` for live-indicator patterns.
+- **Variants:** `-default`, `-primary`, `-accent`, `-success`, `-warning`, `-error`, `-info`.
+  All variants use semantic `--mk-*-50` background, full color for text, `--mk-*-bd` border.
+
+### Inline alert (`.mk-alert`)
+
+Full-width informational block. Reaches for `.mk-r` radius and semantic colors.
+
+```html
+<div class="mk-alert mk-alert-warning">
+  <span class="mk-alert-icon"><!-- SVG --></span>
+  <div class="mk-alert-body">
+    <span class="mk-alert-title">Draft saved</span>
+    Your changes were queued — compile to publish.
+  </div>
+</div>
+```
+
+- **Base:** `.mk-alert` — flex, 14px body, 16px icon slot.
+- **`.mk-alert-title`** — 600 weight, 13px, renders in `currentColor`.
+- **Variants:** `-default`, `-info`, `-success`, `-warning`, `-error`.
+
+### Floating notifications (`.mk-toast`)
+
+Stacked, auto-dismissing toasts anchored bottom-right. Created via JS — no markup needed.
+
+**JS API:**
+```js
+// basic
+mkToast('Document compiled.', { type: 'success' })
+
+// with title + custom duration
+mkToast('Sync failed — check your connection.', {
+  type: 'error',
+  title: 'Export error',
+  duration: 6000,      // ms; 0 = persistent
+})
+
+// returns dismiss fn
+const close = mkToast('Processing…', { type: 'info', duration: 0 })
+close() // call to dismiss
+```
+
+- **`type`:** `'default'` | `'success'` | `'warning'` | `'error'` | `'info'`
+- **Appearance:** frosted glass (`backdrop-filter`), matches nav style, semantic left-border accent.
+- **`mk-toast-progress`** — 2px bottom bar that depletes over `duration`; hidden when `prefers-reduced-motion`.
+- **Stack:** `.mk-toast-stack` is appended to `<body>` on first call; `aria-live="polite"` for screen readers.
+- Respects `prefers-reduced-motion` — animations disabled.
+
+### Dialog / Modal (`.mk-dialog`)
+
+Centered overlay for confirmations, forms, detail views.
+
+```html
+<div class="mk-dialog-backdrop" id="my-dialog" style="display:none" data-dismiss-on-backdrop>
+  <div class="mk-dialog">
+    <div class="mk-dialog-head">
+      <h2 class="mk-dialog-title">Delete <em>document</em></h2>
+      <button class="mk-dialog-close" onclick="mkDialogClose(this.closest('.mk-dialog-backdrop'))">
+        <!-- X SVG -->
+      </button>
+    </div>
+    <p class="mk-dialog-sub">This can't be undone.</p>
+    <div class="mk-dialog-body">…</div>
+    <div class="mk-dialog-footer">
+      <button class="mk-btn mk-btn-outline" onclick="mkDialogClose(document.getElementById('my-dialog'))">Cancel</button>
+      <button class="mk-btn mk-btn-primary">Delete</button>
+    </div>
+  </div>
+</div>
+```
+
+**JS helpers:**
+```js
+mkDialogOpen(document.getElementById('my-dialog'))
+mkDialogClose(document.getElementById('my-dialog'))
+```
+
+- **Base backdrop:** `.mk-dialog-backdrop` — fixed, blurred overlay, flex-centered.
+- **Sizes:** `.mk-dialog-sm` (360px), default (480px), `.mk-dialog-lg` (640px), `.mk-dialog-xl` (800px).
+- **`data-dismiss-on-backdrop`** — clicking the backdrop closes the dialog.
+- **Title `<em>`** renders in Instrument Serif italic + `--mk-pri`, matching the hero/auth pattern.
+- **`.mk-dialog-footer`** — right-aligned actions; `.mk-dialog-footer-left` for left-aligned.
+- **`.mk-dialog-danger`** — danger variant: error-colored title.
+- Mobile: bottom-sheet slide-up (full width, square bottom corners).
+
 ### CTA band (`.mk-cta-band`)
 Full-width brand-color block with white headline + light button.
 
@@ -184,6 +282,43 @@ copyright and tagline.
   theme-aware coloring.
 - **Sizing utilities:** `.mk-icon-12 / -14 / -16` for explicit pixel
   sizes when used outside icon-shaped containers.
+
+## Semantic color tokens
+
+Added to `:root` (light) and `[data-theme="dark"]` alongside the brand tokens.
+
+| Token family       | Light (hex)  | Dark (rgba/hex)               | Usage                    |
+| ------------------ | ------------ | ----------------------------- | ------------------------ |
+| `--mk-success`     | `#16a34a`    | `#4ade80`                     | Confirmations, saves     |
+| `--mk-success-50`  | `#f0fdf4`    | `rgba(74,222,128,.12)`        | Badge/alert background   |
+| `--mk-success-bd`  | `#bbf7d0`    | `rgba(74,222,128,.28)`        | Badge/alert border       |
+| `--mk-warning`     | `#d97706`    | `#fbbf24`                     | Caution, beta flags      |
+| `--mk-warning-50`  | `#fffbeb`    | `rgba(251,191,36,.12)`        | Badge/alert background   |
+| `--mk-warning-bd`  | `#fde68a`    | `rgba(251,191,36,.28)`        | Badge/alert border       |
+| `--mk-error`       | `#dc2626`    | `#f87171`                     | Errors, destructive      |
+| `--mk-error-50`    | `#fef2f2`    | `rgba(248,113,113,.12)`       | Badge/alert background   |
+| `--mk-error-bd`    | `#fecaca`    | `rgba(248,113,113,.28)`       | Badge/alert border       |
+| `--mk-info`        | `#0369a1`    | `#38bdf8`                     | Informational            |
+| `--mk-info-50`     | `#f0f9ff`    | `rgba(56,189,248,.12)`        | Badge/alert background   |
+| `--mk-info-bd`     | `#bae6fd`    | `rgba(56,189,248,.28)`        | Badge/alert border       |
+
+## Spacing scale
+
+Defined as `--mk-sp-*` on `:root` for consistent spacing across components.
+
+| Token        | Value  |
+| ------------ | ------ |
+| `--mk-sp-1`  | `4px`  |
+| `--mk-sp-2`  | `8px`  |
+| `--mk-sp-3`  | `12px` |
+| `--mk-sp-4`  | `16px` |
+| `--mk-sp-5`  | `20px` |
+| `--mk-sp-6`  | `24px` |
+| `--mk-sp-8`  | `32px` |
+| `--mk-sp-10` | `40px` |
+| `--mk-sp-12` | `48px` |
+| `--mk-sp-16` | `64px` |
+| `--mk-sp-24` | `96px` |
 
 ## Shadows
 
