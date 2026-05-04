@@ -36,6 +36,8 @@ The page must read as *trustworthy enough to commit a dissertation to* before it
 
 **No inline styles.** `style=""` is banned except for CSS custom property injection (e.g., `--i` stagger index on reveal groups).
 
+**No raw SVG injection.** Never paste or generate raw `<svg>` markup inside JS, CSS, HEEx, or HTML. For icons, first search and prefer existing icon packs: `lucide` and `simple-icons` are already in `assets/package.json`, and existing app icons can be rendered with `<.mk_icon name="..." class="..."/>`. Only create a new standalone `.svg` asset when no suitable package or existing app icon exists.
+
 **Reduced motion is not optional.** Every animation or transition needs a `@media (prefers-reduced-motion: reduce)` counterpart. It's already wired up — keep it that way.
 
 **Usability floor:** body text ≥ 14px, line-height ≥ 1.5, contrast ≥ 4.5:1 on body text, ≥ 3:1 on UI elements. No scroll hijacking. Every CTA reachable by keyboard.

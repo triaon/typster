@@ -274,12 +274,16 @@ copyright and tagline.
 
 ## Iconography
 
-- **Source files:** `priv/static/images/icons/*.svg` — 12 standalone
-  monochrome SVGs (`arrow-right`, `github`, `file`, `image`, `bolt`,
-  `command`, `eye`, `cloud-upload`, `share`, `font`, `moon`, `sun`).
-- **Component:** `<.mk_icon name="..." class="..."/>` from
-  `TypsterWeb.MarketingIcons` inlines them with `currentColor` for
-  theme-aware coloring.
+- **Preferred sources:** search existing icon packs before inventing a new
+  mark. `lucide` and `simple-icons` are available in `assets/package.json`.
+- **Existing app icons:** `priv/static/images/icons/*.svg` contains
+  standalone monochrome SVG assets (`arrow-right`, `github`, `file`,
+  `image`, `bolt`, `command`, `eye`, `cloud-upload`, `share`, `font`,
+  `moon`, `sun`) rendered through `<.mk_icon name="..." class="..."/>`
+  from `TypsterWeb.MarketingIcons`.
+- **No raw SVG injection:** never paste or generate raw `<svg>` markup inside
+  JS, CSS, HEEx, or HTML. Only create a new standalone `.svg` asset when no
+  suitable package icon or existing app icon exists.
 - **Sizing utilities:** `.mk-icon-12 / -14 / -16` for explicit pixel
   sizes when used outside icon-shaped containers.
 
