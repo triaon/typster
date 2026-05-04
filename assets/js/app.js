@@ -18,7 +18,7 @@
 // To load it, simply add a second `<link>` to your `root.html.heex` file.
 
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
-import { createIcons, ArrowRight, BookText, ChartNoAxesColumn, CloudUpload, Command, Eye, File, FileInput, FileText, GraduationCap, Image, Moon, NotebookPen, PenLine, ReceiptText, Share2, Sparkles, Sun, Type, Users, Zap } from "lucide"
+import { createIcons, ArrowRight, Bell, BookText, ChartNoAxesColumn, CircleCheck, CircleX, CloudUpload, Command, Eye, File, FileInput, FileText, GraduationCap, Image, Info, Moon, NotebookPen, PenLine, ReceiptText, Share2, Sparkles, Sun, TriangleAlert, Type, Users, X as XIcon, Zap } from "lucide"
 import { siGithub } from "simple-icons"
 import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
@@ -56,7 +56,7 @@ liveSocket.connect()
 window.liveSocket = liveSocket
 
 const Github = [["path", { d: siGithub.path, fill: "currentColor", stroke: "none" }]]
-const mkIconSet = { ArrowRight, BookText, ChartNoAxesColumn, CloudUpload, Command, Eye, File, FileInput, FileText, GraduationCap, Image, Moon, NotebookPen, PenLine, ReceiptText, Share2, Sparkles, Sun, Type, Users, Zap, Github }
+const mkIconSet = { ArrowRight, Bell, BookText, ChartNoAxesColumn, CircleCheck, CircleX, CloudUpload, Command, Eye, File, FileInput, FileText, GraduationCap, Image, Info, Moon, NotebookPen, PenLine, ReceiptText, Share2, Sparkles, Sun, TriangleAlert, Type, Users, X: XIcon, Zap, Github }
 const mkIcons = () => createIcons({ icons: mkIconSet })
 mkIcons()
 
@@ -130,13 +130,12 @@ window.toggleMkTheme = (btn) => {
 // ── Floating notifications (toast) ───────────────────────────────────────
 (function initToasts() {
   const ICONS = {
-    success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>',
-    error:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>',
-    warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.29 3.86-7.43 12.86A2 2 0 0 0 4.6 19.5h14.82a2 2 0 0 0 1.74-2.78L13.71 3.86a2 2 0 0 0-3.43 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
-    info:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
-    default: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+    success: "circle-check",
+    error: "circle-x",
+    warning: "triangle-alert",
+    info: "info",
+    default: "bell",
   };
-  const CLOSE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
 
   let stack = null;
   const getStack = () => {
@@ -173,11 +172,12 @@ window.toggleMkTheme = (btn) => {
     el.className = `mk-toast mk-toast-${type}`;
     el.setAttribute('role', 'status');
     el.innerHTML = `
-      <span class="mk-toast-icon">${icon}</span>
+      <span class="mk-toast-icon"><i data-lucide="${icon}" aria-hidden="true"></i></span>
       <div class="mk-toast-body">${titleHtml}<p class="mk-toast-msg">${message}</p></div>
-      <button class="mk-toast-close" aria-label="Dismiss">${CLOSE_SVG}</button>
+      <button class="mk-toast-close" aria-label="Dismiss"><i data-lucide="x" aria-hidden="true"></i></button>
       ${progressHtml}
     `;
+    mkIcons(el);
 
     el.querySelector('.mk-toast-close').addEventListener('click', () => dismiss(el));
     getStack().appendChild(el);
