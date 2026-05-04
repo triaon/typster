@@ -57,7 +57,10 @@ window.liveSocket = liveSocket
 
 const Github = [["path", { d: siGithub.path, fill: "currentColor", stroke: "none" }]]
 const mkIconSet = { ArrowRight, Bell, BookText, ChartNoAxesColumn, CircleCheck, CircleX, CloudUpload, Command, Eye, File, FileInput, FileText, GraduationCap, Image, Info, Moon, NotebookPen, PenLine, ReceiptText, Share2, Sparkles, Sun, TriangleAlert, Type, Users, X: XIcon, Zap, Github }
-const mkIcons = () => createIcons({ icons: mkIconSet })
+const mkIcons = (root = document) => {
+  createIcons({ icons: mkIconSet, root })
+  root.querySelectorAll("svg[data-lucide]").forEach((svg) => svg.removeAttribute("data-lucide"))
+}
 mkIcons()
 
 // ── Theme toggle (view-transition circular reveal) ────────────────────────

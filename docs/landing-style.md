@@ -9,9 +9,9 @@ and `lib/typster_web/controllers/page_html/home.html.heex` (sections).
 
 Two themes selected via `data-theme` on `<html>` (`light` default, `dark`
 opt-in). User preference is stored in `localStorage["phx:theme"]` and
-applied before first paint by an inline script in the layout. Theme
-toggle uses the View Transitions API for a circular reveal centered on
-the toggle button.
+applied by the head bootstrap before the stylesheet loads, preventing
+theme flash on first paint. Theme toggle uses the View Transitions API
+for a circular reveal centered on the toggle button.
 
 ```html
 <html data-theme="dark">
