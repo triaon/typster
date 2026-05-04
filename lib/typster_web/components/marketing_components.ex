@@ -1,4 +1,8 @@
 defmodule TypsterWeb.MarketingComponents do
+  @moduledoc """
+  Shared function components for marketing pages.
+  """
+
   use Phoenix.Component
 
   attr :class, :string, default: "mk-feat"
