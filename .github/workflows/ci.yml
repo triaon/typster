@@ -92,6 +92,9 @@ jobs:
       - name: Run tests
         run: mix test
 
+      - name: Build assets
+        run: mix assets.build
+
       - name: Run browser tests
         working-directory: assets
         run: bun run test:e2e:theme

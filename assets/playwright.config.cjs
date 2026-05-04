@@ -1,6 +1,6 @@
 const { defineConfig, devices } = require("@playwright/test")
 
-const port = process.env.PORT || "4010"
+const port = process.env.PORT || "4000"
 const baseURL = process.env.PLAYWRIGHT_BASE_URL || `http://127.0.0.1:${port}`
 
 module.exports = defineConfig({
@@ -14,7 +14,7 @@ module.exports = defineConfig({
     trace: "retain-on-failure"
   },
   webServer: {
-    command: `cd .. && PORT=${port} mix phx.server`,
+    command: `cd .. && PHX_SERVER=true PORT=${port} mix phx.server`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000
