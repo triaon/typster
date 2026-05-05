@@ -126,7 +126,24 @@
   width: 34px;
   padding: 0;
 }
-.mk-theme-toggle svg { width: 16px; height: 16px; }
+.mk-theme-toggle svg { width: 16px; height: 16px; transition: transform 200ms var(--mk-ease-out); }
+/* While the pour is in flight, the toggle tilts like a vessel being emptied
+   and the icon swings back upright. Origin is the button's spout side. */
+.mk-theme-toggle.is-pouring {
+  animation: mk-pour-tilt 760ms cubic-bezier(.4, 0, .2, 1) both;
+  transform-origin: var(--mk-pour-x, 50%) 100%;
+}
+.mk-theme-toggle.is-pouring svg { transform: rotate(8deg); }
+@keyframes mk-pour-tilt {
+  0%   { transform: rotate(0) translateY(0); }
+  18%  { transform: rotate(-14deg) translateY(-1px); }
+  55%  { transform: rotate(-10deg) translateY(0); }
+  100% { transform: rotate(0) translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mk-theme-toggle.is-pouring,
+  .mk-theme-toggle.is-pouring svg { animation: none; transform: none; }
+}
 .mk-icon-12 { width: 12px; height: 12px; }
 .mk-icon-14 { width: 14px; height: 14px; }
 .mk-icon-16 { width: 16px; height: 16px; }
