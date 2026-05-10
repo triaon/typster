@@ -11,7 +11,8 @@ defmodule Typster.MixProject do
       aliases: aliases(),
       deps: deps(),
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
-      listeners: [Phoenix.CodeReloader]
+      listeners: [Phoenix.CodeReloader],
+      dialyzer: [plt_core_path: "priv/plts"]
     ]
   end
 

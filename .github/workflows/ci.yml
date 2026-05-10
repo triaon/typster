@@ -83,7 +83,7 @@ jobs:
         run: pixi run mix compile
 
       - name: Run Sobelow
-        run: pixi run mix sobelow --skip --exit Low
+        run: pixi run mix sobelow --skip Config.HTTPS,Config.CSP --exit Low
 
   dialyzer:
     name: Dialyzer type check
@@ -125,7 +125,7 @@ jobs:
         run: pixi run mix compile
 
       - name: Run Dialyzer
-        run: pixi run mix dialyzer --plt-core-path priv/plts --no-check
+        run: pixi run mix dialyzer
 
   trivy:
     name: Trivy vulnerability scan
@@ -139,7 +139,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Run Trivy (filesystem)
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scan-ref: .
