@@ -1,0 +1,51 @@
+/* ── Status tones ───────────────────────────────────────────────────────── */
+/*
+ * Shared tone variables consumed by `_badge.css`, `_alert.css`, `_toast.css`.
+ * One source of truth for the success / warning / error / info palette so
+ * the four colored components can be re-skinned by setting `--tone-*` once
+ * per variant rather than four times per component × four tones.
+ *
+ *   --tone-fg     accented foreground (text/icon/dot)
+ *   --tone-fg-h   muted variant for high-contrast surfaces (light theme alerts)
+ *   --tone-bg     soft fill background
+ *   --tone-bd     soft border
+ *   --tone-solid  full-saturation fill (solid badges, dots, progress bars)
+ */
+
+:is(.mk-badge-success, .mk-alert-success, .mk-toast-success) {
+  --tone-fg: var(--mk-success-h);
+  --tone-fg-h: var(--mk-success);
+  --tone-bg: var(--mk-success-50);
+  --tone-bd: var(--mk-success-bd);
+  --tone-solid: var(--mk-success);
+}
+:is(.mk-badge-warning, .mk-alert-warning, .mk-toast-warning) {
+  --tone-fg: var(--mk-warning-h);
+  --tone-fg-h: var(--mk-warning);
+  --tone-bg: var(--mk-warning-50);
+  --tone-bd: var(--mk-warning-bd);
+  --tone-solid: var(--mk-warning);
+}
+:is(.mk-badge-error, .mk-alert-error, .mk-toast-error) {
+  --tone-fg: var(--mk-error-h);
+  --tone-fg-h: var(--mk-error);
+  --tone-bg: var(--mk-error-50);
+  --tone-bd: var(--mk-error-bd);
+  --tone-solid: var(--mk-error);
+}
+:is(.mk-badge-info, .mk-alert-info, .mk-toast-info) {
+  --tone-fg: var(--mk-info-h);
+  --tone-fg-h: var(--mk-info);
+  --tone-bg: var(--mk-info-50);
+  --tone-bd: var(--mk-info-bd);
+  --tone-solid: var(--mk-info);
+}
+
+/* In dark mode the *-h foregrounds are too dim — promote each tone to its
+   brighter base color in one rule rather than 12 individual overrides. */
+[data-theme="dark"] :is(
+  .mk-badge-success, .mk-badge-warning, .mk-badge-error, .mk-badge-info,
+  .mk-alert-success, .mk-alert-warning, .mk-alert-error, .mk-alert-info
+) {
+  --tone-fg: var(--tone-fg-h);
+}
