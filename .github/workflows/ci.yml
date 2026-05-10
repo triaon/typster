@@ -159,7 +159,7 @@ jobs:
 
       - name: Run browser tests
         working-directory: assets
-        run: pixi run bun run test:e2e:theme
+        run: pixi run bun run test:e2e
 
       - name: Upload Playwright report
         if: ${{ failure() }}
