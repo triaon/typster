@@ -3,7 +3,29 @@ name: CI
 on:
   push:
     branches: ["main"]
+    paths:
+      - "lib/**"
+      - "test/**"
+      - "config/**"
+      - "priv/**"
+      - "assets/**"
+      - "mix.exs"
+      - "mix.lock"
+      - "pixi.toml"
+      - "pixi.lock"
+      - ".github/workflows/ci.yml"
   pull_request:
+    paths:
+      - "lib/**"
+      - "test/**"
+      - "config/**"
+      - "priv/**"
+      - "assets/**"
+      - "mix.exs"
+      - "mix.lock"
+      - "pixi.toml"
+      - "pixi.lock"
+      - ".github/workflows/ci.yml"
 
 permissions:
   contents: read

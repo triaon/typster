@@ -3,10 +3,26 @@ name: SAST
 on:
   push:
     branches: ["main"]
+    paths:
+      - "lib/**"
+      - "test/**"
+      - "config/**"
+      - "mix.exs"
+      - "mix.lock"
+      - "assets/**"
+      - ".github/workflows/**"
   pull_request:
     branches: ["main"]
+    paths:
+      - "lib/**"
+      - "test/**"
+      - "config/**"
+      - "mix.exs"
+      - "mix.lock"
+      - "assets/**"
+      - ".github/workflows/**"
   schedule:
-    - cron: '45 7 * * 1'
+    - cron: "45 7 * * 1"
 
 permissions:
   contents: read
