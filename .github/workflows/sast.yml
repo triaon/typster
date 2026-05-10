@@ -69,6 +69,9 @@ jobs:
   sobelow:
     name: Sobelow security scan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     strategy:
       fail-fast: false
       matrix:
@@ -85,7 +88,12 @@ jobs:
       - name: compile
         run: mix compile
       - name: sobelow
-        run: mix sobelow --skip --ignore Config.HTTPS,Config.CSP --exit Medium
+        run: mix sobelow --skip --ignore Config.HTTPS,Config.CSP --exit Medium --format sarif > sobelow_output.sarif
+      - name: upload sarif
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: sobelow_output.sarif
 
   dialyzer:
     name: Dialyzer type check
