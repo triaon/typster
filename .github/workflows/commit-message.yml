@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 concurrency:
   group: commit-message-${{ github.event.pull_request.number || github.ref }}
@@ -23,42 +24,43 @@ jobs:
 
     steps:
       - name: Validate commit messages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          EVENT_PATH: ${{ github.event_path }}
-          REPOSITORY: ${{ github.repository }}
         run: |
           node <<'NODE'
           const fs = require("node:fs");
 
-          const event = JSON.parse(fs.readFileSync(process.env.EVENT_PATH, "utf8"));
-          const repo = process.env.REPOSITORY;
+          const eventPath = process.env.GITHUB_EVENT_PATH;
+          const repo = process.env.GITHUB_REPOSITORY;
           const token = process.env.GITHUB_TOKEN;
           const pattern = new RegExp(process.env.COMMIT_MESSAGE_PATTERN, "u");
-          const zeroSha = /^0{40}$/;
 
+          if (!eventPath) {
+            throw new Error("GITHUB_EVENT_PATH is empty. Cannot read GitHub event payload.");
+          }
+
+          const event = JSON.parse(fs.readFileSync(eventPath, "utf8"));
           const failures = [];
 
           function normalizeMessage(message) {
             return String(message ?? "").replace(/\r\n/g, "\n").trimEnd();
           }
 
-          function checkCommit(sha, rawMessage) {
-            const message = normalizeMessage(rawMessage);
+          function checkCommit(sha, message) {
+            const normalized = normalizeMessage(message);
 
-            if (!pattern.test(message)) {
+            if (!pattern.test(normalized)) {
               failures.push({
                 sha: String(sha ?? "").slice(0, 7),
-                subject: message.split("\n", 1)[0] || "<empty message>",
+                subject: normalized.split("\n", 1)[0] || "<empty message>",
               });
             }
           }
 
-          async function github(path) {
-            const response = await fetch(`https://api.github.com${path}`, {
+          async function githubJson(url) {
+            const response = await fetch(url, {
               headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: "application/vnd.github+json",
+                "X-GitHub-Api-Version": "2022-11-28",
                 "User-Agent": "commit-message-style-check",
               },
             });
@@ -70,30 +72,13 @@ jobs:
             return response.json();
           }
 
-          async function getCompareCommits(base, head) {
+          async function getPullRequestCommits() {
             const commits = [];
+            const baseUrl = event.pull_request.commits_url;
 
             for (let page = 1; ; page += 1) {
-              const data = await github(
-                `/repos/${repo}/compare/${base}...${head}?per_page=100&page=${page}`
-              );
-
-              const pageCommits = data.commits ?? [];
-              commits.push(...pageCommits);
-
-              if (pageCommits.length < 100) {
-                return commits;
-              }
-            }
-          }
-
-          async function getPullRequestCommitsFallback(pullNumber) {
-            const commits = [];
-
-            for (let page = 1; ; page += 1) {
-              const pageCommits = await github(
-                `/repos/${repo}/pulls/${pullNumber}/commits?per_page=100&page=${page}`
-              );
+              const separator = baseUrl.includes("?") ? "&" : "?";
+              const pageCommits = await githubJson(`${baseUrl}${separator}per_page=100&page=${page}`);
 
               commits.push(...pageCommits);
 
@@ -107,27 +92,17 @@ jobs:
             let commits = [];
 
             if (event.pull_request) {
-              const base = event.pull_request.base.sha;
-              const head = event.pull_request.head.sha;
+              commits = await getPullRequestCommits();
 
-              try {
-                commits = await getCompareCommits(base, head);
-              } catch (error) {
-                console.warn("Compare API failed; falling back to PR commits API.");
-                console.warn(error.message);
-                commits = await getPullRequestCommitsFallback(event.pull_request.number);
+              for (const commit of commits) {
+                checkCommit(commit.sha, commit.commit?.message);
               }
-            } else if (event.before && event.after && !zeroSha.test(event.before)) {
-              commits = await getCompareCommits(event.before, event.after);
             } else {
               commits = event.commits ?? [];
-            }
 
-            for (const commit of commits) {
-              checkCommit(
-                commit.sha ?? commit.id,
-                commit.commit?.message ?? commit.message
-              );
+              for (const commit of commits) {
+                checkCommit(commit.id, commit.message);
+              }
             }
 
             if (failures.length > 0) {
@@ -153,3 +128,5 @@ jobs:
             process.exit(1);
           });
           NODE
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
