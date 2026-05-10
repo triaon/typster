@@ -17,7 +17,7 @@ Typst is a modern LaTeX alternative — a markup-based language for producing be
 
 | Light | Dark |
 |---|---|
-| ![TODO: screenshot — light theme]() | ![TODO: screenshot — dark theme]() |
+| <img width="3248" height="2122" alt="image" src="https://github.com/user-attachments/assets/c230e505-ee44-4167-8b1a-15b9c7bc5e74" /> | <img width="3248" height="2122" alt="image" src="https://github.com/user-attachments/assets/53416a43-0e45-4cd2-b8de-87eff6d9965d" /> |
 
 ---
 
