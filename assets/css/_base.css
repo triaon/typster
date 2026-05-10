@@ -136,11 +136,17 @@
     );
   }
 
+  /* Theme pour: only the new layer is animated (clip-path keyframes from
+     `assets/js/app.js`). The old layer is left untouched — any transform
+     on it would expose the new layer at the viewport edges and paint an
+     opposite-color border during the transition. */
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;
     mix-blend-mode: normal;
   }
+  ::view-transition-new(root) { z-index: 1; }
+  ::view-transition-old(root) { z-index: 0; }
 
   @media (prefers-reduced-motion: reduce) {
     ::view-transition-old(root),

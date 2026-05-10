@@ -264,8 +264,16 @@ copyright and tagline.
   of `.mk-reveal-group`) starts hidden (`opacity 0`, `translateY 12px`)
   and animates in on `IntersectionObserver` intersection. Group children
   receive a `--i` index var for staggered delay.
-- **Theme transition:** circular `clip-path` reveal anchored on the
-  toggle button, 480ms `cubic-bezier(.4,0,.2,1)`.
+- **Theme transition (pour):** the toggle button "pours" the next theme
+  into the page. A round-shaped `clip-path` reveal grows from the
+  button's center on `::view-transition-new(root)` (760ms,
+  `cubic-bezier(.65, 0, .15, 1)`) and drifts ~14px downward so it reads
+  as liquid spreading by gravity rather than a flat ripple. Only the
+  new layer is animated — the outgoing layer is left static so its
+  edges don't expose the incoming color as a stray border. While the
+  pour is in flight, the toggle gains `.is-pouring` and tilts like a
+  teapot (`@keyframes mk-pour-tilt`); a `__mkPouring` flag suppresses
+  re-entry until the transition resolves.
 - **Easing curves:**
   - `--mk-ease`: `cubic-bezier(.4, 0, .2, 1)` (standard)
   - `--mk-ease-out`: `cubic-bezier(0.23, 1, 0.32, 1)` (overshoot-out)

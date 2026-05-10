@@ -62,7 +62,12 @@ const mkIcons = (root = document) => {
 }
 mkIcons()
 
-// ── Theme toggle (view-transition circular reveal) ────────────────────────
+// ── Theme toggle (view-transition pour reveal) ────────────────────────────
+// The button "pours" the next theme into the page: a round-shaped clip-path
+// reveal grows from the toggle's center and drifts a touch downward so it
+// reads as liquid spreading by gravity. The outgoing layer is gently lifted
+// to feel displaced. While the pour is in flight, the button gains
+// `.is-pouring` and tilts like a teapot (CSS keyframes in `_nav.css`).
 window.toggleMkTheme = (btn) => {
   const cur = document.documentElement.getAttribute("data-theme")
     ?? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
@@ -76,19 +81,40 @@ window.toggleMkTheme = (btn) => {
   if (!document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     apply(); return;
   }
+  if (window.__mkPouring) return;
+  window.__mkPouring = true;
 
   const r = btn.getBoundingClientRect();
   const x = r.left + r.width / 2;
   const y = r.top + r.height / 2;
   const endRadius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
 
+  btn.style.setProperty("--mk-pour-x", `${r.width / 2}px`);
+  btn.classList.add("is-pouring");
+  setTimeout(() => btn.classList.remove("is-pouring"), 900);
+
   const t = document.startViewTransition(apply);
   t.ready.then(() => {
+    // New theme pours in: round-shaped reveal anchored on the toggle, drifting
+    // downward through three keyframes for an organic spread.
+    //
+    // We deliberately do NOT animate the old layer (no scale/translate/fade):
+    // any transform on `::view-transition-old(root)` exposes the new layer
+    // beneath at the viewport edges, producing a visible opposite-color
+    // border during the transition.
     document.documentElement.animate(
-      { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`] },
-      { duration: 480, easing: "cubic-bezier(.4,0,.2,1)", pseudoElement: "::view-transition-new(root)" }
+      {
+        clipPath: [
+          `circle(0px at ${x}px ${y}px)`,
+          `circle(${endRadius * 0.18}px at ${x}px ${y + 4}px)`,
+          `circle(${endRadius}px at ${x}px ${y + 14}px)`,
+        ],
+        offset: [0, 0.22, 1],
+      },
+      { duration: 760, easing: "cubic-bezier(.65, 0, .15, 1)", pseudoElement: "::view-transition-new(root)" }
     );
   });
+  t.finished.finally(() => { window.__mkPouring = false; });
 };
 
 // ── Nav scroll state ─────────────────────────────────────────────────────
