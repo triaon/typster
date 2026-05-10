@@ -1,4 +1,4 @@
-const { test, expect } = require("@playwright/test")
+import { test, expect } from "@playwright/test"
 
 const stabilityMs = Number(process.env.THEME_STABILITY_MS || 7_000)
 

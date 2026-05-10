@@ -1,4 +1,4 @@
-const { test, expect } = require("@playwright/test")
+import { test, expect } from "@playwright/test"
 
 // Pixel-color helpers — used to assert that the html background settles to the
 // expected theme without flickering through an intermediate "strange vivid"
@@ -135,7 +135,7 @@ test.describe("theme pour animation", () => {
     await expect(toggle).not.toHaveClass(/is-pouring/, { timeout: 2000 })
     const theme = await page.locator("html").getAttribute("data-theme")
     expect(["dark", "light"]).toContain(theme)
-    // The pouring guard must have been released.
-    expect(await page.evaluate(() => window.__mkPouring)).toBeFalsy()
+    // The pouring guard must be released once the view transition finishes.
+    await expect.poll(() => page.evaluate(() => window.__mkPouring), { timeout: 2000 }).toBeFalsy()
   })
 })
