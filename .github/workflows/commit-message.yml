@@ -20,7 +20,7 @@ jobs:
     timeout-minutes: 2
 
     env:
-      COMMIT_MESSAGE_PATTERN: '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-zA-Z0-9\-._]+\))?(!)?: [A-Za-z0-9][^.\n]*(\([^)]+\): [A-Za-z0-9][^.\n]*(\([^)]+\))?)?(\.\.\.)?(\n[\s\S]*)?$'
+      COMMIT_MESSAGE_PATTERN: '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-zA-Z0-9\-._]+\))?(!)?: [A-Za-z0-9](?:[^\n]*(?:\.\.\.|\.[a-zA-Z0-9]|[^\n.][^\n.])|[^\n.])?(\n[\s\S]*)?$'
 
     steps:
       - name: Validate commit messages
