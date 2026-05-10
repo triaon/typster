@@ -97,6 +97,11 @@ window.toggleMkTheme = (btn) => {
   t.ready.then(() => {
     // New theme pours in: round-shaped reveal anchored on the toggle, drifting
     // downward through three keyframes for an organic spread.
+    //
+    // We deliberately do NOT animate the old layer (no scale/translate/fade):
+    // any transform on `::view-transition-old(root)` exposes the new layer
+    // beneath at the viewport edges, producing a visible opposite-color
+    // border during the transition.
     document.documentElement.animate(
       {
         clipPath: [
@@ -107,12 +112,6 @@ window.toggleMkTheme = (btn) => {
         offset: [0, 0.22, 1],
       },
       { duration: 760, easing: "cubic-bezier(.65, 0, .15, 1)", pseudoElement: "::view-transition-new(root)" }
-    );
-    // Old theme settles: tiny scale + lift, like the previous surface is
-    // being displaced by the incoming pour.
-    document.documentElement.animate(
-      { transform: ["scale(1) translateY(0)", "scale(.985) translateY(-4px)"], opacity: [1, 0.85] },
-      { duration: 760, easing: "cubic-bezier(.4, 0, .2, 1)", pseudoElement: "::view-transition-old(root)", fill: "forwards" }
     );
   });
   t.finished.finally(() => { window.__mkPouring = false; });
