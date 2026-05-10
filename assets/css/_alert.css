@@ -7,7 +7,7 @@
   align-items: flex-start;
   padding: 14px 16px;
   border-radius: var(--mk-r);
-  border: 1px solid transparent;
+  border: 1px solid var(--tone-bd, var(--mk-bd));
   font: 14px/1.55 'Inter', sans-serif;
   color: var(--mk-fg2);
 }
@@ -21,9 +21,8 @@
   color: currentColor;
 }
 
-.mk-alert-default { background: var(--mk-bd2); border-color: var(--mk-bd); color: var(--mk-fg3); }
+.mk-alert-default { background: var(--mk-bd2); color: var(--mk-fg3); }
 :is(.mk-alert-info, .mk-alert-success, .mk-alert-warning, .mk-alert-error) {
   background: var(--tone-bg);
-  border-color: var(--tone-bd);
   color: var(--tone-fg);
 }
