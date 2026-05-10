@@ -127,9 +127,19 @@
 }
 
 /* ── Design system partials ──────────────────────────────────────────────── */
+/* Order matters: tokens before consumers, status tones before the badge/
+   alert/toast files that read `--tone-*`, typography before files that
+   would otherwise need their own `<em>` accent rule. */
 @import "./_tokens.css";
 @import "./_base.css";
+@import "./_typography.css";
 @import "./_nav.css";
+@import "./_hero.css";
 @import "./_landing.css";
 @import "./_auth.css";
-@import "./_components.css";
+@import "./_status.css";
+@import "./_badge.css";
+@import "./_alert.css";
+@import "./_toast.css";
+@import "./_dialog.css";
+@import "./_shadcn-base.css";
