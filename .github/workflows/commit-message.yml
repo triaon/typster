@@ -1,0 +1,155 @@
+name: Commit message style
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, edited, ready_for_review]
+  push:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: commit-message-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  commit-message:
+    name: commit-message
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    env:
+      COMMIT_MESSAGE_PATTERN: '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-zA-Z0-9\-._]+\))?(!)?: [A-Za-z0-9][^.\n]*(\([^)]+\): [A-Za-z0-9][^.\n]*(\([^)]+\))?)?(\.\.\.)?(\n[\s\S]*)?$'
+
+    steps:
+      - name: Validate commit messages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_PATH: ${{ github.event_path }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          node <<'NODE'
+          const fs = require("node:fs");
+
+          const event = JSON.parse(fs.readFileSync(process.env.EVENT_PATH, "utf8"));
+          const repo = process.env.REPOSITORY;
+          const token = process.env.GITHUB_TOKEN;
+          const pattern = new RegExp(process.env.COMMIT_MESSAGE_PATTERN, "u");
+          const zeroSha = /^0{40}$/;
+
+          const failures = [];
+
+          function normalizeMessage(message) {
+            return String(message ?? "").replace(/\r\n/g, "\n").trimEnd();
+          }
+
+          function checkCommit(sha, rawMessage) {
+            const message = normalizeMessage(rawMessage);
+
+            if (!pattern.test(message)) {
+              failures.push({
+                sha: String(sha ?? "").slice(0, 7),
+                subject: message.split("\n", 1)[0] || "<empty message>",
+              });
+            }
+          }
+
+          async function github(path) {
+            const response = await fetch(`https://api.github.com${path}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/vnd.github+json",
+                "User-Agent": "commit-message-style-check",
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`${response.status} ${response.statusText}: ${await response.text()}`);
+            }
+
+            return response.json();
+          }
+
+          async function getCompareCommits(base, head) {
+            const commits = [];
+
+            for (let page = 1; ; page += 1) {
+              const data = await github(
+                `/repos/${repo}/compare/${base}...${head}?per_page=100&page=${page}`
+              );
+
+              const pageCommits = data.commits ?? [];
+              commits.push(...pageCommits);
+
+              if (pageCommits.length < 100) {
+                return commits;
+              }
+            }
+          }
+
+          async function getPullRequestCommitsFallback(pullNumber) {
+            const commits = [];
+
+            for (let page = 1; ; page += 1) {
+              const pageCommits = await github(
+                `/repos/${repo}/pulls/${pullNumber}/commits?per_page=100&page=${page}`
+              );
+
+              commits.push(...pageCommits);
+
+              if (pageCommits.length < 100) {
+                return commits;
+              }
+            }
+          }
+
+          async function main() {
+            let commits = [];
+
+            if (event.pull_request) {
+              const base = event.pull_request.base.sha;
+              const head = event.pull_request.head.sha;
+
+              try {
+                commits = await getCompareCommits(base, head);
+              } catch (error) {
+                console.warn("Compare API failed; falling back to PR commits API.");
+                console.warn(error.message);
+                commits = await getPullRequestCommitsFallback(event.pull_request.number);
+              }
+            } else if (event.before && event.after && !zeroSha.test(event.before)) {
+              commits = await getCompareCommits(event.before, event.after);
+            } else {
+              commits = event.commits ?? [];
+            }
+
+            for (const commit of commits) {
+              checkCommit(
+                commit.sha ?? commit.id,
+                commit.commit?.message ?? commit.message
+              );
+            }
+
+            if (failures.length > 0) {
+              console.error("");
+              console.error("Invalid commit message(s):");
+
+              for (const failure of failures) {
+                console.error(`- ${failure.sha}: ${failure.subject}`);
+              }
+
+              console.error("");
+              console.error("Expected pattern:");
+              console.error(process.env.COMMIT_MESSAGE_PATTERN);
+              console.error("");
+              process.exit(1);
+            }
+
+            console.log(`Validated ${commits.length} commit message(s).`);
+          }
+
+          main().catch((error) => {
+            console.error(error);
+            process.exit(1);
+          });
+          NODE
