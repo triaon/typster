@@ -219,13 +219,11 @@ export const Preview = {
 
 export const SaveStatus = {
   updated() {
-    const status = this.el.textContent.trim()
-    if (status === "saved") {
-      this.el.classList.remove("text-error")
-      this.el.classList.add("text-success")
-    } else if (status === "error") {
-      this.el.classList.remove("text-success")
-      this.el.classList.add("text-error")
+    const label = this.el.querySelector(".ts-savestat__label")
+    const status = label ? label.textContent.trim() : this.el.textContent.trim()
+    this.el.classList.remove("ts-savestat--saved", "ts-savestat--saving", "ts-savestat--error")
+    if (status === "saved" || status === "saving" || status === "error") {
+      this.el.classList.add(`ts-savestat--${status}`)
     }
   }
 }
