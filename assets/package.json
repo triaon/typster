@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test:e2e": "playwright test",
-    "test:e2e:theme": "playwright test e2e/theme_stability.spec.cjs e2e/theme_pour.spec.cjs",
+    "test:e2e:theme": "playwright test e2e/theme_stability.spec.mjs e2e/theme_pour.spec.mjs",
     "dev": "bun run --watch",
     "build": "bun run"
   },
