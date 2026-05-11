@@ -47,6 +47,10 @@ jobs:
           function checkCommit(sha, message) {
             const normalized = normalizeMessage(message);
 
+            if (/^Merge /.test(normalized)) {
+              return;
+            }
+
             if (!pattern.test(normalized)) {
               failures.push({
                 sha: String(sha ?? "").slice(0, 7),
