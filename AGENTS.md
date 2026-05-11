@@ -427,6 +427,21 @@ And **never** do this:
 - Oban is used for background jobs. Test config disables queues/plugins and uses manual testing mode
 - Backend changes must update or add Elixir tests for the changed behavior. Prefer focused test files first, then broader `mix test` or `mix precommit` when ready
 
+## Translation guidelines
+
+- Typster uses Phoenix/Gettext through `TypsterWeb.Gettext`
+- Supported locales are `en` and `ru`
+- Translation catalogs live in `priv/gettext/<locale>/LC_MESSAGES/`; templates live in `priv/gettext/*.pot`
+- Locale switching is session-based through `/locale/:locale`, with supported locales defined in `lib/typster_web/controllers/locale_controller.ex`
+- Wrap user-facing Elixir, HEEx, LiveView, and component copy in `gettext/1`, `gettext/2`, or `ngettext/3`
+- Prefer stable dotted keys such as `editor.compile`, `projects.index.title`, and `common.created_date`
+- Use interpolation placeholders instead of string concatenation, and keep placeholder names identical across locales
+- Use `ngettext/3` for plural text instead of hand-rolled count conditionals
+- After adding or changing gettext keys, run `mix gettext.extract --merge`
+- Fill both English and Russian `msgstr` values before handoff
+- Do not manually edit generated `msgid` values in `.po` files; update the source gettext call and re-run extraction
+- When adding a new locale, add its `priv/gettext/<locale>/LC_MESSAGES/` files, update `LocaleController.@supported`, and verify the locale route still works
+
 ## Checks and quality gates
 
 - Run targeted tests while working, based on the files and behavior changed
