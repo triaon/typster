@@ -5,7 +5,6 @@ import { typst } from "./typst_syntax"
 import { markdown } from "@codemirror/lang-markdown"
 import { yaml } from "@codemirror/lang-yaml"
 import { stex } from "@codemirror/legacy-modes/mode/stex"
-import { bibtex } from "@codemirror/legacy-modes/mode/bibtex"
 import { compileTypst } from "./typst_worker"
 
 function getCurrentTheme() {
@@ -82,7 +81,6 @@ function getLanguageExtension(lang) {
     case "yaml":     return yaml()
     case "latex":
     case "tex":      return StreamLanguage.define(stex)
-    case "bibtex":   return StreamLanguage.define(bibtex)
     default:         return []
   }
 }
