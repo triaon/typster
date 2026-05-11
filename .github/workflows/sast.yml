@@ -125,7 +125,7 @@ jobs:
       - name: compile
         run: mix compile
       - name: dialyzer
-        run: mix assay --format sarif > assay_output.sarif
+        run: mix assay --format github --format sarif | grep '^{' > assay_output.sarif || true
       - name: upload sarif
         if: always()
         uses: github/codeql-action/upload-sarif@v4

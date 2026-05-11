@@ -80,6 +80,7 @@ defmodule Typster.MixProject do
       {:salad_ui, "~> 1.0.0-beta.3"},
       {:credo, "~> 1.7.0-rc.1", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.14", only: [:dev, :test], runtime: false},
+      {:igniter, "~> 0.6", runtime: false},
       {:assay, "~> 0.5", only: [:dev, :test], runtime: false}
     ]
   end
