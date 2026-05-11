@@ -36,6 +36,17 @@
 .ts-p { font: 14px/20px 'Inter', system-ui, sans-serif; color: var(--fg2); margin: 0; }
 .ts-muted { color: var(--fg3); }
 
+/* ── App nav: override mk-nav fixed positioning so it sits in the flex flow ── */
+.ts-app .mk-nav {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  width: calc(100% - 24px);
+  margin: 8px auto;
+  flex-shrink: 0;
+}
+
 /* ── Navbar ───────────────────────────────────────────────────────────────── */
 .ts-nav { display: flex; align-items: center; height: 56px; padding: 0 20px; border-bottom: 1px solid var(--bd); background: var(--bg); flex-shrink: 0; }
 .ts-nav__brand { display: flex; align-items: center; gap: 8px; font: 600 15px 'Inter', system-ui, sans-serif; letter-spacing: -.01em; cursor: pointer; text-decoration: none; color: var(--fg); }

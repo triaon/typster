@@ -38,10 +38,12 @@ defmodule TypsterWeb.Layouts do
   end
 
   @doc """
-  Shared floating nav used by both the marketing layout and the auth layout.
-  Pass a `:nav_links` slot to render the section-link bar (marketing only).
+  Shared floating nav used by marketing, auth, and app layouts.
+  Pass a `:nav_links` slot to render the section-link bar.
+  Set `app_mode` to true on authenticated app pages to show only the logout CTA.
   """
   attr :current_scope, :map, default: nil
+  attr :app_mode, :boolean, default: false
   slot :nav_links
 
   def mk_nav(assigns) do
@@ -63,16 +65,27 @@ defmodule TypsterWeb.Layouts do
           <i data-lucide="moon" class="mk-icon-moon" aria-hidden="true"></i>
           <i data-lucide="sun" class="mk-icon-sun" aria-hidden="true"></i>
         </button>
-        <%= if @current_scope && @current_scope.user do %>
-          <a href={~p"/projects"} class="mk-btn mk-btn-ghost mk-btn-sm">My projects</a>
-          <.link href={~p"/users/log-out"} method="delete" class="mk-btn mk-btn-ghost mk-btn-sm">
+        <%= if @app_mode do %>
+          <.link
+            :if={@current_scope && @current_scope.user}
+            href={~p"/users/log-out"}
+            method="delete"
+            class="mk-btn mk-btn-ghost mk-btn-sm"
+          >
             Log out
           </.link>
         <% else %>
-          <.link href={~p"/users/log-in"} class="mk-btn mk-btn-ghost mk-btn-sm">Log in</.link>
-          <.link href={~p"/users/register"} class="mk-btn mk-btn-primary mk-btn-sm">
-            Sign up free
-          </.link>
+          <%= if @current_scope && @current_scope.user do %>
+            <a href={~p"/projects"} class="mk-btn mk-btn-ghost mk-btn-sm">My projects</a>
+            <.link href={~p"/users/log-out"} method="delete" class="mk-btn mk-btn-ghost mk-btn-sm">
+              Log out
+            </.link>
+          <% else %>
+            <.link href={~p"/users/log-in"} class="mk-btn mk-btn-ghost mk-btn-sm">Log in</.link>
+            <.link href={~p"/users/register"} class="mk-btn mk-btn-primary mk-btn-sm">
+              Sign up free
+            </.link>
+          <% end %>
         <% end %>
       </div>
     </header>
@@ -104,38 +117,14 @@ defmodule TypsterWeb.Layouts do
   def app(assigns) do
     ~H"""
     <div class="ts-app">
-      <header class="ts-nav">
-        <a href={~p"/projects"} class="ts-nav__brand">
-          <div class="ts-mark">T</div>
-          <span>Typster</span>
-        </a>
-        <nav class="ts-nav__links">
-          <.link navigate={~p"/projects"} class="ts-navbtn">Projects</.link>
-          <.link
-            :if={@current_scope && @current_scope.user}
-            navigate={~p"/users/settings"}
-            class="ts-navbtn"
-          >
+      <.mk_nav app_mode={true} current_scope={@current_scope}>
+        <:nav_links>
+          <.link navigate={~p"/projects"}>Projects</.link>
+          <.link :if={@current_scope && @current_scope.user} navigate={~p"/users/settings"}>
             Settings
           </.link>
-          <.theme_toggle />
-          <.link
-            :if={@current_scope && @current_scope.user}
-            href={~p"/users/log-out"}
-            method="delete"
-            class="ts-navbtn"
-          >
-            Log out
-          </.link>
-          <.link
-            :if={!@current_scope || !@current_scope.user}
-            navigate={~p"/users/log-in"}
-            class="ts-navbtn"
-          >
-            Log in
-          </.link>
-        </nav>
-      </header>
+        </:nav_links>
+      </.mk_nav>
       {render_slot(@inner_block)}
       <.flash_group flash={@flash} />
     </div>
