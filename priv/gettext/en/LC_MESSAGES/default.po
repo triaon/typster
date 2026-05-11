@@ -28,7 +28,7 @@ msgstr "Connection lost — attempting to reconnect"
 
 #: lib/typster_web/components/layouts.ex:87
 #: lib/typster_web/live/user_live/confirmation.ex:57
-#: lib/typster_web/live/user_live/registration.ex:13
+#: lib/typster_web/live/user_live/registration.ex:14
 #, elixir-autogen, elixir-format
 msgid "auth.log_in"
 msgstr "Log in"
@@ -46,7 +46,7 @@ msgstr "Log out"
 msgid "auth.logging_in"
 msgstr "Logging in…"
 
-#: lib/typster_web/live/user_live/login.ex:15
+#: lib/typster_web/live/user_live/login.ex:16
 #, elixir-autogen, elixir-format
 msgid "auth.sign_up"
 msgstr "Sign up"
@@ -67,9 +67,9 @@ msgstr "Cancel"
 msgid "common.created_date"
 msgstr "Created %{date}"
 
-#: lib/typster_web/live/user_live/login.ex:40
-#: lib/typster_web/live/user_live/login.ex:66
-#: lib/typster_web/live/user_live/registration.ex:20
+#: lib/typster_web/live/user_live/login.ex:41
+#: lib/typster_web/live/user_live/login.ex:67
+#: lib/typster_web/live/user_live/registration.ex:21
 #: lib/typster_web/live/user_live/settings.ex:31
 #: lib/typster_web/live/user_live/settings.ex:36
 #, elixir-autogen, elixir-format
@@ -81,12 +81,12 @@ msgstr "Email"
 msgid "common.open"
 msgstr "Open"
 
-#: lib/typster_web/live/user_live/login.ex:52
+#: lib/typster_web/live/user_live/login.ex:53
 #, elixir-autogen, elixir-format
 msgid "common.or"
 msgstr "or"
 
-#: lib/typster_web/live/user_live/login.ex:75
+#: lib/typster_web/live/user_live/login.ex:76
 #: lib/typster_web/live/user_live/settings.ex:76
 #, elixir-autogen, elixir-format
 msgid "common.password"
@@ -163,27 +163,27 @@ msgstr "Download"
 msgid "editor.files"
 msgstr "Files"
 
-#: lib/typster_web/live/editor_live/index.ex:156
+#: lib/typster_web/live/editor_live/index.ex:155
 #, elixir-autogen, elixir-format
 msgid "editor.flash.asset_upload_failed"
 msgstr "Asset upload failed."
 
-#: lib/typster_web/live/editor_live/index.ex:153
+#: lib/typster_web/live/editor_live/index.ex:152
 #, elixir-autogen, elixir-format
 msgid "editor.flash.asset_uploaded"
 msgstr "Asset uploaded."
 
-#: lib/typster_web/live/editor_live/index.ex:113
+#: lib/typster_web/live/editor_live/index.ex:112
 #, elixir-autogen, elixir-format
 msgid "editor.flash.binary_asset"
 msgstr "Binary assets cannot be opened in the editor."
 
-#: lib/typster_web/live/editor_live/index.ex:182
+#: lib/typster_web/live/editor_live/index.ex:181
 #, elixir-autogen, elixir-format
 msgid "editor.flash.create_failed"
 msgstr "File could not be created."
 
-#: lib/typster_web/live/editor_live/index.ex:122
+#: lib/typster_web/live/editor_live/index.ex:121
 #, elixir-autogen, elixir-format
 msgid "editor.flash.unsupported_file"
 msgstr "Only .typ and .bib files can be edited."
@@ -223,17 +223,17 @@ msgstr "%{files} files · %{assets} assets"
 msgid "editor.select_file_placeholder"
 msgstr "Select a file to start editing"
 
-#: lib/typster_web/live/editor_live/index.ex:196
+#: lib/typster_web/live/editor_live/index.ex:195
 #, elixir-autogen, elixir-format
 msgid "editor.status.error"
 msgstr "Error"
 
-#: lib/typster_web/live/editor_live/index.ex:194
+#: lib/typster_web/live/editor_live/index.ex:193
 #, elixir-autogen, elixir-format
 msgid "editor.status.saved"
 msgstr "Saved"
 
-#: lib/typster_web/live/editor_live/index.ex:195
+#: lib/typster_web/live/editor_live/index.ex:194
 #, elixir-autogen, elixir-format
 msgid "editor.status.saving"
 msgstr "Saving"
@@ -264,27 +264,27 @@ msgstr "System theme"
 msgid "layout.theme.toggle"
 msgstr "Toggle theme"
 
-#: lib/typster_web/live/user_live/login.ex:48
+#: lib/typster_web/live/user_live/login.ex:49
 #, elixir-autogen, elixir-format
 msgid "login.email_link"
 msgstr "Email me a link"
 
-#: lib/typster_web/live/user_live/login.ex:121
+#: lib/typster_web/live/user_live/login.ex:122
 #, elixir-autogen, elixir-format
 msgid "login.flash.instructions_sent"
 msgstr "If your email is in our system, you will receive instructions for logging in shortly."
 
-#: lib/typster_web/live/user_live/login.ex:24
+#: lib/typster_web/live/user_live/login.ex:25
 #, elixir-autogen, elixir-format
 msgid "login.local_mail.active"
 msgstr "Local mail adapter is active."
 
-#: lib/typster_web/live/user_live/login.ex:25
+#: lib/typster_web/live/user_live/login.ex:26
 #, elixir-autogen, elixir-format
 msgid "login.local_mail.mailbox"
 msgstr "the mailbox"
 
-#: lib/typster_web/live/user_live/login.ex:25
+#: lib/typster_web/live/user_live/login.ex:26
 #, elixir-autogen, elixir-format
 msgid "login.local_mail.view_sent"
 msgstr "View sent emails in"
@@ -299,12 +299,12 @@ msgstr "No account?"
 msgid "login.reauth"
 msgstr "Reauthenticate to access sensitive account settings."
 
-#: lib/typster_web/live/user_live/login.ex:89
+#: lib/typster_web/live/user_live/login.ex:90
 #, elixir-autogen, elixir-format
 msgid "login.session_only"
 msgstr "This session only"
 
-#: lib/typster_web/live/user_live/login.ex:86
+#: lib/typster_web/live/user_live/login.ex:87
 #, elixir-autogen, elixir-format
 msgid "login.stay_signed_in"
 msgstr "Stay signed in"
@@ -427,17 +427,17 @@ msgstr "New project"
 msgid "projects.search.placeholder"
 msgstr "Search projects"
 
-#: lib/typster_web/live/user_live/registration.ex:32
+#: lib/typster_web/live/user_live/registration.ex:33
 #, elixir-autogen, elixir-format
 msgid "registration.create_account"
 msgstr "Create account"
 
-#: lib/typster_web/live/user_live/registration.ex:30
+#: lib/typster_web/live/user_live/registration.ex:31
 #, elixir-autogen, elixir-format
 msgid "registration.creating"
 msgstr "Creating account..."
 
-#: lib/typster_web/live/user_live/registration.ex:65
+#: lib/typster_web/live/user_live/registration.ex:66
 #, elixir-autogen, elixir-format
 msgid "registration.flash.instructions_sent"
 msgstr "An email was sent to %{email}, please access it to confirm your account."
