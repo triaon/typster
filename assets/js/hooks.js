@@ -72,6 +72,9 @@ export const CodeMirror = {
         this.setupThemeHandlers()
       } else if (this.editorInstance) {
         updateEditorContent(this.editorInstance, newContent)
+        if (language && this.editorInstance.updateLanguage) {
+          this.editorInstance.updateLanguage(language)
+        }
       }
     })
 
