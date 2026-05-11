@@ -36,6 +36,25 @@
 .ts-p { font: 14px/20px 'Inter', system-ui, sans-serif; color: var(--fg2); margin: 0; }
 .ts-muted { color: var(--fg3); }
 
+/* ── Connection-lost banner ───────────────────────────────────────────────── */
+.ts-conn-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 16px;
+  background: var(--mk-error-50);
+  border-bottom: 1px solid var(--mk-error-bd);
+  color: var(--mk-error-h);
+  font: 500 12px/1 'Inter', system-ui, sans-serif;
+  flex-shrink: 0;
+}
+[data-theme="dark"] .ts-conn-banner { color: var(--mk-error); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ts-conn-banner { color: var(--mk-error); }
+}
+
 /* ── App nav: override mk-nav fixed positioning so it sits in the flex flow ── */
 .ts-app .mk-nav {
   position: relative;

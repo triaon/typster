@@ -125,6 +125,16 @@ defmodule TypsterWeb.Layouts do
           </.link>
         </:nav_links>
       </.mk_nav>
+      <div
+        id="connection-banner"
+        class="ts-conn-banner"
+        phx-disconnected={JS.remove_attribute("hidden")}
+        phx-connected={JS.set_attribute({"hidden", ""})}
+        hidden
+      >
+        <.icon name="hero-arrow-path" class="size-3 motion-safe:animate-spin" />
+        <span>Connection lost — attempting to reconnect</span>
+      </div>
       {render_slot(@inner_block)}
       <.flash_group flash={@flash} />
     </div>
@@ -146,30 +156,6 @@ defmodule TypsterWeb.Layouts do
     <div id={@id} class="mk-toast-stack" aria-live="polite" aria-atomic="false">
       <.flash kind={:info} flash={@flash} />
       <.flash kind={:error} flash={@flash} />
-
-      <.flash
-        id="client-error"
-        kind={:error}
-        title={gettext("We can't find the internet")}
-        phx-disconnected={show(".phx-client-error #client-error") |> JS.remove_attribute("hidden")}
-        phx-connected={hide("#client-error") |> JS.set_attribute({"hidden", ""})}
-        hidden
-      >
-        {gettext("Attempting to reconnect")}
-        <.icon name="hero-arrow-path" class="ml-1 size-3 motion-safe:animate-spin" />
-      </.flash>
-
-      <.flash
-        id="server-error"
-        kind={:error}
-        title={gettext("Something went wrong!")}
-        phx-disconnected={show(".phx-server-error #server-error") |> JS.remove_attribute("hidden")}
-        phx-connected={hide("#server-error") |> JS.set_attribute({"hidden", ""})}
-        hidden
-      >
-        {gettext("Attempting to reconnect")}
-        <.icon name="hero-arrow-path" class="ml-1 size-3 motion-safe:animate-spin" />
-      </.flash>
     </div>
     """
   end
