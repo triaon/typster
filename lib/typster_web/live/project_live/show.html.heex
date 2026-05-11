@@ -4,30 +4,40 @@
       <header class="ts-pagehead">
         <div>
           <p class="ts-p ts-muted" style="margin-bottom: 6px;">
-            <.link navigate={~p"/projects"} style="color: var(--fg3);">Projects</.link>
+            <.link navigate={~p"/projects"} style="color: var(--fg3);">
+              {gettext("nav.projects")}
+            </.link>
             &nbsp;/&nbsp;{@project.name}
           </p>
           <h1 class="ts-h1">{@project.name}</h1>
           <p class="ts-p ts-muted">
-            Created {Calendar.strftime(@project.inserted_at, "%B %d, %Y")}
+            {gettext("common.created_date",
+              date: Calendar.strftime(@project.inserted_at, "%B %d, %Y")
+            )}
           </p>
         </div>
         <.link navigate={~p"/projects/#{@project.id}/edit"} class="ts-btn ts-btn--primary">
-          <.icon name="hero-pencil" class="size-3.5" /> Open editor
+          <.icon name="hero-pencil" class="size-3.5" /> {gettext("project.open_editor")}
         </.link>
       </header>
 
       <section class="ts-card">
         <div class="ts-card__h">
           <div style="display: flex; align-items: center; justify-content: space-between;">
-            <h3 class="ts-h3">Files</h3>
-            <span class="ts-p ts-muted">{length(@file_tree) + length(@assets)} entries</span>
+            <h3 class="ts-h3">{gettext("project.files")}</h3>
+            <span class="ts-p ts-muted">
+              {ngettext(
+                "project.entries.one",
+                "project.entries.other",
+                length(@file_tree) + length(@assets)
+              )}
+            </span>
           </div>
         </div>
         <div class="ts-card__c" style="padding-top: 8px; padding-bottom: 8px;">
           <%= if Enum.empty?(@file_tree) and Enum.empty?(@assets) do %>
             <div class="ts-empty" style="border: none; padding: 24px 0;">
-              <p>Open the editor to create your first file</p>
+              <p>{gettext("project.files.empty")}</p>
             </div>
           <% else %>
             <ul id="project-files" class="ts-tree" style="padding-bottom: 0;">
@@ -42,9 +52,9 @@
                 <button
                   phx-click="delete_file"
                   phx-value-id={file.id}
-                  phx-confirm="Delete this file? This action cannot be undone."
+                  phx-confirm={gettext("project.file.delete.confirm")}
                   class="ts-btn ts-btn--ghost ts-btn--icon ts-btn--sm"
-                  aria-label="Delete file"
+                  aria-label={gettext("project.file.delete.label")}
                   style="opacity: 0; transition: opacity 200ms;"
                   onmouseenter="this.style.opacity='1'"
                   onmouseleave="this.style.opacity='0'"

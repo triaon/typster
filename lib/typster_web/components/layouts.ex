@@ -60,7 +60,7 @@ defmodule TypsterWeb.Layouts do
         <button
           class="mk-btn mk-btn-ghost mk-btn-sm mk-theme-toggle"
           onclick="toggleMkTheme(this)"
-          aria-label="Toggle theme"
+          aria-label={gettext("layout.theme.toggle")}
         >
           <i data-lucide="moon" class="mk-icon-moon" aria-hidden="true"></i>
           <i data-lucide="sun" class="mk-icon-sun" aria-hidden="true"></i>
@@ -72,18 +72,22 @@ defmodule TypsterWeb.Layouts do
             method="delete"
             class="mk-btn mk-btn-ghost mk-btn-sm"
           >
-            Log out
+            {gettext("auth.log_out")}
           </.link>
         <% else %>
           <%= if @current_scope && @current_scope.user do %>
-            <a href={~p"/projects"} class="mk-btn mk-btn-ghost mk-btn-sm">My projects</a>
+            <a href={~p"/projects"} class="mk-btn mk-btn-ghost mk-btn-sm">
+              {gettext("nav.my_projects")}
+            </a>
             <.link href={~p"/users/log-out"} method="delete" class="mk-btn mk-btn-ghost mk-btn-sm">
-              Log out
+              {gettext("auth.log_out")}
             </.link>
           <% else %>
-            <.link href={~p"/users/log-in"} class="mk-btn mk-btn-ghost mk-btn-sm">Log in</.link>
+            <.link href={~p"/users/log-in"} class="mk-btn mk-btn-ghost mk-btn-sm">
+              {gettext("auth.log_in")}
+            </.link>
             <.link href={~p"/users/register"} class="mk-btn mk-btn-primary mk-btn-sm">
-              Sign up free
+              {gettext("auth.sign_up_free")}
             </.link>
           <% end %>
         <% end %>
@@ -119,9 +123,9 @@ defmodule TypsterWeb.Layouts do
     <div class="ts-app">
       <.mk_nav app_mode={true} current_scope={@current_scope}>
         <:nav_links>
-          <.link navigate={~p"/projects"}>Projects</.link>
+          <.link navigate={~p"/projects"}>{gettext("nav.projects")}</.link>
           <.link :if={@current_scope && @current_scope.user} navigate={~p"/users/settings"}>
-            Settings
+            {gettext("nav.settings")}
           </.link>
         </:nav_links>
       </.mk_nav>
@@ -133,7 +137,7 @@ defmodule TypsterWeb.Layouts do
         hidden
       >
         <.icon name="hero-arrow-path" class="size-3 motion-safe:animate-spin" />
-        <span>Connection lost — attempting to reconnect</span>
+        <span>{gettext("app.connection_lost")}</span>
       </div>
       {render_slot(@inner_block)}
       <.flash_group flash={@flash} />
@@ -172,7 +176,7 @@ defmodule TypsterWeb.Layouts do
         class="ts-toggle__btn"
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="system"
-        aria-label="System theme"
+        aria-label={gettext("layout.theme.system")}
       >
         <.icon name="hero-computer-desktop-micro" class="size-3.5" />
       </button>
@@ -180,7 +184,7 @@ defmodule TypsterWeb.Layouts do
         class="ts-toggle__btn"
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="light"
-        aria-label="Light theme"
+        aria-label={gettext("layout.theme.light")}
       >
         <.icon name="hero-sun-micro" class="size-3.5" />
       </button>
@@ -188,7 +192,7 @@ defmodule TypsterWeb.Layouts do
         class="ts-toggle__btn"
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="dark"
-        aria-label="Dark theme"
+        aria-label={gettext("layout.theme.dark")}
       >
         <.icon name="hero-moon-micro" class="size-3.5" />
       </button>

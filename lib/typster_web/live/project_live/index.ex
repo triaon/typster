@@ -9,7 +9,7 @@ defmodule TypsterWeb.ProjectLive.Index do
 
     {:ok,
      socket
-     |> assign(:page_title, "Projects")
+     |> assign(:page_title, gettext("projects.index.title"))
      |> assign(:search, "")
      |> assign(:show_new_dialog, false)
      |> assign(:project_count, length(projects))

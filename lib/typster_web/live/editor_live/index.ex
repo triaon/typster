@@ -109,7 +109,7 @@ defmodule TypsterWeb.EditorLive.Index do
        })
        |> push_event("content_updated", %{content: file.content || ""})}
     else
-      {:noreply, put_flash(socket, :error, "Binary assets cannot be opened in the editor.")}
+      {:noreply, put_flash(socket, :error, gettext("editor.flash.binary_asset"))}
     end
   end
 
@@ -118,7 +118,7 @@ defmodule TypsterWeb.EditorLive.Index do
     if Files.editable_file?(path) do
       create_text_file(socket, path, content)
     else
-      {:noreply, put_flash(socket, :error, "Only .typ and .bib files can be edited.")}
+      {:noreply, put_flash(socket, :error, gettext("editor.flash.unsupported_file"))}
     end
   end
 
@@ -149,10 +149,10 @@ defmodule TypsterWeb.EditorLive.Index do
          socket
          |> assign(:assets, assets)
          |> assign(:project_assets, project_assets(assets))
-         |> put_flash(:info, "Asset uploaded.")}
+         |> put_flash(:info, gettext("editor.flash.asset_uploaded"))}
 
       {:error, _reason} ->
-        {:noreply, put_flash(socket, :error, "Asset upload failed.")}
+        {:noreply, put_flash(socket, :error, gettext("editor.flash.asset_upload_failed"))}
     end
   end
 
@@ -178,7 +178,7 @@ defmodule TypsterWeb.EditorLive.Index do
          |> push_event("content_updated", %{content: content})}
 
       {:error, _changeset} ->
-        {:noreply, put_flash(socket, :error, "File could not be created.")}
+        {:noreply, put_flash(socket, :error, gettext("editor.flash.create_failed"))}
     end
   end
 
@@ -189,6 +189,11 @@ defmodule TypsterWeb.EditorLive.Index do
 
   defp editor_language(nil), do: "plain"
   defp editor_language(file), do: Files.editor_language(file.path)
+
+  defp save_status_label("saved"), do: gettext("editor.status.saved")
+  defp save_status_label("saving"), do: gettext("editor.status.saving")
+  defp save_status_label("error"), do: gettext("editor.status.error")
+  defp save_status_label(status), do: status
 
   defp project_sources(file_tree) do
     file_tree

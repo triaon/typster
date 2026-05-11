@@ -13,8 +13,10 @@ defmodule TypsterWeb.UserLive.Settings do
         <div class="ts-page ts-page--narrow">
           <header class="ts-pagehead">
             <div>
-              <h1 class="ts-h1">Account settings</h1>
-              <p class="ts-p ts-muted">Manage your account email address and password settings.</p>
+              <h1 class="ts-h1">{gettext("settings.title")}</h1>
+              <p class="ts-p ts-muted">
+                {gettext("settings.subtitle")}
+              </p>
             </div>
           </header>
 
@@ -26,12 +28,12 @@ defmodule TypsterWeb.UserLive.Settings do
           >
             <section class="ts-card">
               <div class="ts-card__h">
-                <h3 class="ts-h3">Email</h3>
-                <p class="ts-p ts-muted">Used for sign-in and notifications.</p>
+                <h3 class="ts-h3">{gettext("common.email")}</h3>
+                <p class="ts-p ts-muted">{gettext("settings.email.description")}</p>
               </div>
               <div class="ts-card__c">
                 <label class="ts-field">
-                  <span class="ts-field__label">Email</span>
+                  <span class="ts-field__label">{gettext("common.email")}</span>
                   <.input
                     field={@email_form[:email]}
                     type="email"
@@ -42,8 +44,12 @@ defmodule TypsterWeb.UserLive.Settings do
                 </label>
               </div>
               <div class="ts-card__f">
-                <button type="submit" class="ts-btn ts-btn--primary" phx-disable-with="Changing…">
-                  Change email
+                <button
+                  type="submit"
+                  class="ts-btn ts-btn--primary"
+                  phx-disable-with={gettext("settings.email.changing")}
+                >
+                  {gettext("settings.email.change")}
                 </button>
               </div>
             </section>
@@ -67,12 +73,14 @@ defmodule TypsterWeb.UserLive.Settings do
             />
             <section class="ts-card">
               <div class="ts-card__h">
-                <h3 class="ts-h3">Password</h3>
-                <p class="ts-p ts-muted">A confirmation email will be sent before changes apply.</p>
+                <h3 class="ts-h3">{gettext("common.password")}</h3>
+                <p class="ts-p ts-muted">
+                  {gettext("settings.password.description")}
+                </p>
               </div>
               <div class="ts-card__c">
                 <label class="ts-field">
-                  <span class="ts-field__label">New password</span>
+                  <span class="ts-field__label">{gettext("settings.password.new_label")}</span>
                   <.input
                     field={@password_form[:password]}
                     type="password"
@@ -82,7 +90,7 @@ defmodule TypsterWeb.UserLive.Settings do
                   />
                 </label>
                 <label class="ts-field">
-                  <span class="ts-field__label">Confirm new password</span>
+                  <span class="ts-field__label">{gettext("settings.password.confirm_label")}</span>
                   <.input
                     field={@password_form[:password_confirmation]}
                     type="password"
@@ -92,8 +100,12 @@ defmodule TypsterWeb.UserLive.Settings do
                 </label>
               </div>
               <div class="ts-card__f">
-                <button type="submit" class="ts-btn ts-btn--primary" phx-disable-with="Saving…">
-                  Save password
+                <button
+                  type="submit"
+                  class="ts-btn ts-btn--primary"
+                  phx-disable-with={gettext("common.saving")}
+                >
+                  {gettext("settings.password.save")}
                 </button>
               </div>
             </section>
@@ -101,13 +113,15 @@ defmodule TypsterWeb.UserLive.Settings do
 
           <section class="ts-card ts-card--danger">
             <div class="ts-card__h">
-              <h3 class="ts-h3">Danger zone</h3>
+              <h3 class="ts-h3">{gettext("settings.danger.title")}</h3>
               <p class="ts-p ts-muted">
-                Permanently delete this account and all associated projects.
+                {gettext("settings.danger.description")}
               </p>
             </div>
             <div class="ts-card__f">
-              <button class="ts-btn ts-btn--destructive" disabled>Delete account</button>
+              <button class="ts-btn ts-btn--destructive" disabled>
+                {gettext("settings.danger.delete_account")}
+              </button>
             </div>
           </section>
         </div>
@@ -121,10 +135,10 @@ defmodule TypsterWeb.UserLive.Settings do
     socket =
       case Accounts.update_user_email(socket.assigns.current_scope.user, token) do
         {:ok, _user} ->
-          put_flash(socket, :info, "Email changed successfully.")
+          put_flash(socket, :info, gettext("settings.flash.email_changed"))
 
         {:error, _} ->
-          put_flash(socket, :error, "Email change link is invalid or it has expired.")
+          put_flash(socket, :error, gettext("settings.flash.email_change_invalid"))
       end
 
     {:ok, push_navigate(socket, to: ~p"/users/settings")}
@@ -171,7 +185,7 @@ defmodule TypsterWeb.UserLive.Settings do
           &url(~p"/users/settings/confirm-email/#{&1}")
         )
 
-        info = "A link to confirm your email change has been sent to the new address."
+        info = gettext("settings.flash.email_change_sent")
         {:noreply, socket |> put_flash(:info, info)}
 
       changeset ->

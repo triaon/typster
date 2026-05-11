@@ -3,15 +3,15 @@
     <div class="ts-page">
       <header class="ts-pagehead">
         <div>
-          <h1 class="ts-h1">Projects</h1>
-          <p class="ts-p ts-muted">Open an existing project, or start a new one.</p>
+          <h1 class="ts-h1">{gettext("projects.index.title")}</h1>
+          <p class="ts-p ts-muted">{gettext("projects.index.subtitle")}</p>
         </div>
         <button
           id="new-project-button"
           phx-click="new_project"
           class="ts-btn ts-btn--primary"
         >
-          <.icon name="hero-plus" class="size-3.5" /> New project
+          <.icon name="hero-plus" class="size-3.5" /> {gettext("projects.new")}
         </button>
       </header>
 
@@ -22,18 +22,18 @@
             id="project-search"
             phx-keyup="search"
             phx-debounce="200"
-            placeholder="Search projects"
+            placeholder={gettext("projects.search.placeholder")}
             value={@search}
           />
         </div>
         <span class="ts-p ts-muted">
-          {@project_count} project{if @project_count != 1, do: "s", else: ""}
+          {ngettext("projects.count.one", "projects.count.other", @project_count)}
         </span>
       </div>
 
       <ul id="projects" phx-update="stream" class="ts-list">
         <li class="ts-empty" id="projects-empty" style="display: none;">
-          No projects yet.
+          {gettext("projects.empty")}
         </li>
         <li
           :for={{id, project} <- @streams.projects}
@@ -46,7 +46,9 @@
           <div class="ts-list__main">
             <div class="ts-list__title">{project.name}</div>
             <div class="ts-list__sub">
-              Created {Calendar.strftime(project.inserted_at, "%B %d, %Y")}
+              {gettext("common.created_date",
+                date: Calendar.strftime(project.inserted_at, "%B %d, %Y")
+              )}
             </div>
           </div>
           <div class="ts-list__actions">
@@ -54,15 +56,15 @@
               navigate={~p"/projects/#{project.id}/edit"}
               class="ts-btn ts-btn--ghost ts-btn--sm"
             >
-              Open
+              {gettext("common.open")}
             </.link>
             <button
               id={"delete-project-#{project.id}"}
               phx-click="delete"
               phx-value-id={project.id}
-              phx-confirm="Delete this project? This action cannot be undone."
+              phx-confirm={gettext("projects.delete.confirm")}
               class="ts-btn ts-btn--ghost ts-btn--icon"
-              aria-label="Delete project"
+              aria-label={gettext("projects.delete.label")}
             >
               <.icon name="hero-trash" class="size-3.5" />
             </button>
@@ -76,26 +78,28 @@
     <div class="ts-overlay" phx-click="close_dialog">
       <div class="ts-dialog" phx-click="" phx-window-keydown="close_dialog" phx-key="Escape">
         <div class="ts-dialog__header">
-          <h2 class="ts-dialog__title">New project</h2>
-          <p class="ts-dialog__desc">Give it a short, descriptive name.</p>
+          <h2 class="ts-dialog__title">{gettext("projects.new")}</h2>
+          <p class="ts-dialog__desc">{gettext("projects.dialog.description")}</p>
         </div>
         <div class="ts-dialog__body">
           <.form for={%{}} id="new-project-form" phx-submit="create_project">
             <label class="ts-field">
-              <span class="ts-field__label">Project name</span>
+              <span class="ts-field__label">{gettext("projects.name.label")}</span>
               <input
                 class="ts-input"
                 name="name"
                 autofocus
-                placeholder="Quarterly report"
+                placeholder={gettext("projects.name.placeholder")}
                 required
               />
             </label>
             <div class="ts-dialog__footer">
               <button type="button" phx-click="close_dialog" class="ts-btn ts-btn--ghost">
-                Cancel
+                {gettext("common.cancel")}
               </button>
-              <button type="submit" class="ts-btn ts-btn--primary">Create project</button>
+              <button type="submit" class="ts-btn ts-btn--primary">
+                {gettext("projects.create")}
+              </button>
             </div>
           </.form>
         </div>

@@ -3,7 +3,7 @@
     <%!-- Editor top bar: breadcrumb, save status, actions --%>
     <div class="ts-editor__bar">
       <.link navigate={~p"/projects"} class="ts-btn ts-btn--ghost ts-btn--sm">
-        <.icon name="hero-chevron-left" class="size-3" /> Projects
+        <.icon name="hero-chevron-left" class="size-3" /> {gettext("nav.projects")}
       </.link>
       <span class="ts-crumb-sep">/</span>
       <span class="ts-crumb-current">{@project.name}</span>
@@ -14,13 +14,13 @@
         class={"ts-savestat ts-savestat--#{@save_status}"}
       >
         <span class="ts-savestat__dot"></span>
-        <span class="ts-savestat__label">{@save_status}</span>
+        <span class="ts-savestat__label">{save_status_label(@save_status)}</span>
       </div>
 
       <div class="ts-spacer" />
 
       <button class="ts-btn ts-btn--primary ts-btn--sm">
-        <.icon name="hero-play" class="size-3" /> Compile
+        <.icon name="hero-play" class="size-3" /> {gettext("editor.compile")}
       </button>
     </div>
 
@@ -29,7 +29,7 @@
       <%!-- Sidebar: file tree + assets --%>
       <aside class="ts-side">
         <div class="ts-side__head">
-          <span>Files</span>
+          <span>{gettext("editor.files")}</span>
           <div class="ts-side__actions">
             <button
               id="create-main-file-button"
@@ -37,7 +37,7 @@
               phx-value-path="main.typ"
               phx-value-content="#set page(margin: 2cm)\n\n= Introduction\n\nHello, Typst!"
               class="ts-btn ts-btn--ghost ts-btn--icon ts-btn--sm"
-              aria-label="New file"
+              aria-label={gettext("editor.new_file")}
             >
               <.icon name="hero-plus" class="size-3" />
             </button>
@@ -46,7 +46,7 @@
 
         <%= if Enum.empty?(@file_tree) and Enum.empty?(@assets) do %>
           <div class="ts-empty" style="margin: 8px 14px; padding: 20px 12px;">
-            No files yet
+            {gettext("editor.no_files")}
           </div>
         <% else %>
           <ul class="ts-tree">
@@ -68,12 +68,12 @@
         <% end %>
 
         <div class="ts-side__head" style="margin-top: auto;">
-          <span>Assets</span>
+          <span>{gettext("editor.assets")}</span>
           <div class="ts-side__actions">
             <label
               for="asset-file-input"
               class="ts-btn ts-btn--ghost ts-btn--icon ts-btn--sm"
-              aria-label="Upload asset"
+              aria-label={gettext("editor.upload_asset")}
               style="cursor: pointer;"
             >
               <.icon name="hero-arrow-up-tray" class="size-3" />
@@ -89,7 +89,7 @@
           >
             <.icon name="hero-photo" class="size-3.5" />
             <span class="truncate flex-1">{asset.filename}</span>
-            <span class="ts-tree__pill">asset</span>
+            <span class="ts-tree__pill">{gettext("editor.asset")}</span>
           </li>
         </ul>
 
@@ -107,7 +107,7 @@
               class="ts-btn ts-btn--outline ts-btn--sm"
               style="width: 100%;"
             >
-              Upload asset
+              {gettext("editor.upload_asset")}
             </button>
           </.form>
         </div>
@@ -118,7 +118,7 @@
         <div class="ts-source__tabs">
           <div class="ts-tab is-active">
             <.icon name="hero-document" class="size-3" />
-            {if @current_file, do: @current_file.path, else: "No file"}
+            {if @current_file, do: @current_file.path, else: gettext("editor.no_file")}
           </div>
         </div>
 
@@ -140,7 +140,7 @@
             <span style="color: var(--fg4);">
               <.icon name="hero-pencil-square" class="size-8" />
             </span>
-            <p>Select a file to start editing</p>
+            <p>{gettext("editor.select_file_placeholder")}</p>
           </div>
         <% end %>
 
@@ -154,9 +154,12 @@
       <%!-- Preview pane --%>
       <section class="ts-preview">
         <div class="ts-preview__bar">
-          <span>Preview</span>
+          <span>{gettext("editor.preview")}</span>
           <div class="ts-spacer" />
-          <button class="ts-btn ts-btn--ghost ts-btn--icon ts-btn--sm" aria-label="Download">
+          <button
+            class="ts-btn ts-btn--ghost ts-btn--icon ts-btn--sm"
+            aria-label={gettext("editor.download")}
+          >
             <.icon name="hero-arrow-down-tray" class="size-3.5" />
           </button>
         </div>
@@ -174,10 +177,13 @@
               <span style="color: var(--fg4);">
                 <.icon name="hero-eye" class="size-8" />
               </span>
-              <p>Preview will appear here</p>
+              <p>{gettext("editor.preview_placeholder")}</p>
               <%= if @preview_stats do %>
                 <p style="font-size: 12px; color: var(--fg4);">
-                  {@preview_stats.source_count} files · {@preview_stats.asset_count} assets
+                  {gettext("editor.preview_stats",
+                    files: @preview_stats.source_count,
+                    assets: @preview_stats.asset_count
+                  )}
                 </p>
               <% end %>
             </div>
