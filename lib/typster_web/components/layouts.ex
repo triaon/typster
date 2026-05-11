@@ -57,6 +57,15 @@ defmodule TypsterWeb.Layouts do
         {render_slot(@nav_links)}
       </nav>
       <div class="mk-nav-cta">
+        <.link
+          href={
+            ~p"/locale/#{if Gettext.get_locale(TypsterWeb.Gettext) == "ru", do: "en", else: "ru"}"
+          }
+          class="mk-btn mk-btn-ghost mk-btn-sm"
+          aria-label="Switch language"
+        >
+          {if Gettext.get_locale(TypsterWeb.Gettext) == "ru", do: "EN", else: "RU"}
+        </.link>
         <button
           class="mk-btn mk-btn-ghost mk-btn-sm mk-theme-toggle"
           onclick="toggleMkTheme(this)"
