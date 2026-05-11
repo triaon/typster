@@ -47,14 +47,11 @@ msgid "auth.logging_in"
 msgstr ""
 
 #: lib/typster_web/live/user_live/login.ex:16
+#: lib/typster_web/components/layouts.ex:90
 #, elixir-autogen, elixir-format
 msgid "auth.sign_up"
 msgstr ""
 
-#: lib/typster_web/components/layouts.ex:90
-#, elixir-autogen, elixir-format
-msgid "auth.sign_up_free"
-msgstr ""
 
 #: lib/typster_web/live/project_live/index.html.heex:98
 #, elixir-autogen, elixir-format

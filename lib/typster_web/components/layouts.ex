@@ -96,7 +96,7 @@ defmodule TypsterWeb.Layouts do
               {gettext("auth.log_in")}
             </.link>
             <.link href={~p"/users/register"} class="mk-btn mk-btn-primary mk-btn-sm">
-              {gettext("auth.sign_up_free")}
+              {gettext("auth.sign_up")}
             </.link>
           <% end %>
         <% end %>

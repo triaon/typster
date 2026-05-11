@@ -134,7 +134,7 @@ defmodule TypsterWeb.UserLive.SettingsTest do
       })
 
       assert has_element?(lv, "#password_form button", "Save password")
-      assert has_element?(lv, "#password_form p", "should be at least 12 character(s)")
+      assert has_element?(lv, "#password_form p", "should be at least 12 characters")
       assert has_element?(lv, "#password_form p", "does not match password")
     end
 
@@ -151,7 +151,7 @@ defmodule TypsterWeb.UserLive.SettingsTest do
       |> render_submit()
 
       assert has_element?(lv, "#password_form button", "Save password")
-      assert has_element?(lv, "#password_form p", "should be at least 12 character(s)")
+      assert has_element?(lv, "#password_form p", "should be at least 12 characters")
       assert has_element?(lv, "#password_form p", "does not match password")
     end
   end
@@ -175,7 +175,7 @@ defmodule TypsterWeb.UserLive.SettingsTest do
       assert {:live_redirect, %{to: path, flash: flash}} = redirect
       assert path == ~p"/users/settings"
       assert %{"info" => message} = flash
-      assert message == "Email changed successfully."
+      assert message == "Email changed."
       refute Accounts.get_user_by_email(user.email)
       assert Accounts.get_user_by_email(email)
 
@@ -184,7 +184,7 @@ defmodule TypsterWeb.UserLive.SettingsTest do
       assert {:live_redirect, %{to: path, flash: flash}} = redirect
       assert path == ~p"/users/settings"
       assert %{"error" => message} = flash
-      assert message == "Email change link is invalid or it has expired."
+      assert message == "That email change link is invalid or expired."
     end
 
     test "does not update email with invalid token", %{conn: conn, user: user} do
@@ -192,7 +192,7 @@ defmodule TypsterWeb.UserLive.SettingsTest do
       assert {:live_redirect, %{to: path, flash: flash}} = redirect
       assert path == ~p"/users/settings"
       assert %{"error" => message} = flash
-      assert message == "Email change link is invalid or it has expired."
+      assert message == "That email change link is invalid or expired."
       assert Accounts.get_user_by_email(user.email)
     end
 
