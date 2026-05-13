@@ -16,20 +16,26 @@ export function initTypstWorker(hook) {
       worker.onmessage = (event) => {
         const { type, data } = event.data
 
-      if (type === "render") {
+        if (type === "render") {
+          if (previewContainer && data.svg) {
+            let svgContainer = previewContainer.querySelector("#typst-svg-output")
+            if (!svgContainer) {
+              svgContainer = document.createElement("div")
+              svgContainer.id = "typst-svg-output"
+              svgContainer.style.cssText = "width:100%;overflow:auto;"
+              const placeholder = previewContainer.querySelector("#preview-placeholder")
+              if (placeholder) {
+                placeholder.style.display = "none"
+              }
+              previewContainer.appendChild(svgContainer)
+            }
+            svgContainer.innerHTML = data.svg
+          }
+        } else if (type === "error") {
           if (typeof pushEvent === "function") {
-            pushEvent("update_preview", {
-              source_count: data.sourceCount,
-              asset_count: data.assetCount
-            })
-          } else {
-            console.warn("pushEvent not available, preview won't update")
-        }
-      } else if (type === "error") {
-        if (typeof pushEvent === "function") {
-          pushEvent("preview_error", { message: data.message || "Typst preview failed" })
-        }
-        console.error("Typst compilation error:", data)
+            pushEvent("preview_error", { message: data.message || "Typst preview failed" })
+          }
+          console.error("Typst compilation error:", data)
         }
       }
 
@@ -69,22 +75,12 @@ export function compileTypst(content, project = {}) {
     }
   }
 
-  if (worker && worker.readyState !== Worker.CLOSED) {
+  if (worker) {
     worker.postMessage({
       type: "compile",
       content: content,
       project: project
     })
-  } else if (!worker && previewContainer) {
-    setTimeout(() => {
-      if (worker && worker.readyState !== Worker.CLOSED) {
-        worker.postMessage({
-          type: "compile",
-          content: content,
-          project: project
-        })
-      }
-    }, 100)
   }
 }
 

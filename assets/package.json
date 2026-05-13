@@ -16,11 +16,6 @@
     "../deps/*"
   ],
   "dependencies": {
-    "phoenix": "workspace:*",
-    "phoenix_html": "workspace:*",
-    "phoenix_live_view": "workspace:*",
-    "lucide": "^1.14.0",
-    "simple-icons": "^16.18.0",
     "@codemirror/commands": "^6.10.1",
     "@codemirror/lang-lezer": "^6.0.2",
     "@codemirror/lang-markdown": "^6.5.0",
@@ -30,9 +25,17 @@
     "@codemirror/state": "^6.5.2",
     "@codemirror/view": "^6.39.4",
     "@lezer/highlight": "^1.2.3",
+    "@myriaddreamin/typst-ts-renderer": "^0.7.0-rc2",
+    "@myriaddreamin/typst-ts-web-compiler": "^0.7.0-rc2",
+    "@myriaddreamin/typst.ts": "^0.7.0-rc2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "codemirror": "^6.0.2",
+    "lucide": "^1.14.0",
+    "phoenix": "workspace:*",
+    "phoenix_html": "workspace:*",
+    "phoenix_live_view": "workspace:*",
+    "simple-icons": "^16.18.0",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {

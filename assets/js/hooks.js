@@ -36,13 +36,15 @@ export const CodeMirror = {
 
     this.previousFileId = fileId
 
-    this.editorInstance = initEditor(
-      container,
-      content,
-      this.liveSocket || window.liveSocket,
-      fileId,
-      options
-    )
+    if (fileId) {
+      this.editorInstance = initEditor(
+        container,
+        content,
+        this,
+        fileId,
+        options
+      )
+    }
 
     this.handleEvent("content_updated", ({ content }) => {
       if (this.editorInstance) {
@@ -56,20 +58,25 @@ export const CodeMirror = {
       const options = editorOptions(this.el)
       options.language = language || options.language
 
+      this.el.style.display = newFileId ? "" : "none"
+
       if (this.previousFileId !== newFileId) {
         this.previousFileId = newFileId
         this.cleanupThemeHandlers()
         if (this.editorInstance) {
           destroyEditor(this.editorInstance)
+          this.editorInstance = null
         }
-        this.editorInstance = initEditor(
-          container,
-          newContent,
-          this.liveSocket || window.liveSocket,
-          newFileId,
-          options
-        )
-        this.setupThemeHandlers()
+        if (newFileId) {
+          this.editorInstance = initEditor(
+            container,
+            newContent,
+            this,
+            newFileId,
+            options
+          )
+          this.setupThemeHandlers()
+        }
       } else if (this.editorInstance) {
         updateEditorContent(this.editorInstance, newContent)
         if (language && this.editorInstance.updateLanguage) {
@@ -161,7 +168,7 @@ export const CodeMirror = {
         this.editorInstance = initEditor(
           container,
           newContent,
-          this.liveSocket || window.liveSocket,
+          this,
           newFileId,
           options
         )
@@ -176,7 +183,7 @@ export const CodeMirror = {
       this.editorInstance = initEditor(
         container,
         newContent,
-        this.liveSocket || window.liveSocket,
+        this,
         newFileId,
         options
       )
@@ -221,12 +228,5 @@ export const Preview = {
 }
 
 export const SaveStatus = {
-  updated() {
-    const label = this.el.querySelector(".ts-savestat__label")
-    const status = label ? label.textContent.trim() : this.el.textContent.trim()
-    this.el.classList.remove("ts-savestat--saved", "ts-savestat--saving", "ts-savestat--error")
-    if (status === "saved" || status === "saving" || status === "error") {
-      this.el.classList.add(`ts-savestat--${status}`)
-    }
-  }
+  updated() {}
 }

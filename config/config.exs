@@ -50,7 +50,12 @@ config :bun,
   assets: [args: [], cd: Path.expand("../assets", __DIR__)],
   js: [
     args:
-      ~w(build js/app.js --outdir=../priv/static/assets --external /fonts/* --external /images/*),
+      ~w(build js/app.js --outdir=../priv/static/assets/js --external /fonts/* --external /images/*),
+    cd: Path.expand("../assets", __DIR__)
+  ],
+  worker: [
+    args:
+      ~w(build js/typst_worker_impl.js --outdir=../priv/static/assets/js --external /fonts/* --external /images/*),
     cd: Path.expand("../assets", __DIR__)
   ]
 

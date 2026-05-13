@@ -32,8 +32,9 @@ test.describe('Typster Editor Workflow', () => {
       page.locator('.ts-tree__item').filter({ hasText: 'main.typ' })
     ).toBeVisible()
 
-    // Editor container should be mounted
+    // Editor container should be mounted and CodeMirror visible
     await expect(page.locator('#editor-container')).toBeVisible()
+    await expect(page.locator('#editor-container .cm-content')).toBeVisible({ timeout: 10_000 })
   })
 
   test('should edit content in CodeMirror, autosave, and persist after reload', async ({ page }) => {
@@ -41,10 +42,10 @@ test.describe('Typster Editor Workflow', () => {
 
     // Create main.typ — the editor auto-selects the new file
     await page.locator('#create-main-file-button').click()
-    await expect(page.locator('#editor-container')).toBeVisible()
 
-    // Type into the CodeMirror editor
+    // Wait for CodeMirror to initialize inside the container
     const cmContent = page.locator('#editor-container .cm-content')
+    await expect(cmContent).toBeVisible({ timeout: 10_000 })
     await cmContent.click()
 
     const testText = 'Hello from E2E autosave test!'
