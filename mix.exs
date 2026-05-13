@@ -56,7 +56,7 @@ defmodule Typster.MixProject do
       {:phoenix_live_view, "~> 1.1.0"},
       {:lazy_html, ">= 0.1.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.3"},
-      {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
+      {:bun, "~> 2.0", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
@@ -98,15 +98,14 @@ defmodule Typster.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": [
-        "tailwind.install --if-missing",
-        "esbuild.install --if-missing",
-        "cmd --cd assets bun install"
+        "bun.install --if-missing",
+        "bun assets install",
+        "tailwind.install --if-missing"
       ],
-      "assets.build": ["tailwind typster", "esbuild typster", "esbuild typster_worker"],
+      "assets.build": ["tailwind typster", "bun js"],
       "assets.deploy": [
         "tailwind typster --minify",
-        "esbuild typster --minify",
-        "esbuild typster_worker --minify",
+        "bun js --minify",
         "phx.digest"
       ],
       precommit: [

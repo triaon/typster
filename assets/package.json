@@ -12,7 +12,13 @@
   "author": "",
   "license": "ISC",
   "description": "",
+  "workspaces": [
+    "../deps/*"
+  ],
   "dependencies": {
+    "phoenix": "workspace:*",
+    "phoenix_html": "workspace:*",
+    "phoenix_live_view": "workspace:*",
     "lucide": "^1.14.0",
     "simple-icons": "^16.18.0",
     "@codemirror/commands": "^6.10.1",

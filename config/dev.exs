@@ -25,9 +25,7 @@ config :typster, TypsterWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "w9b1aegdeG114HtynjDGhLb5d7y+BTt6SD+Aiafb+yVksjwlb03IVaj+T5Raf6ir",
   watchers: [
-    esbuild: {Esbuild, :install_and_run, [:typster, ~w(--sourcemap=inline --watch)]},
-    esbuild_worker:
-      {Esbuild, :install_and_run, [:typster_worker, ~w(--sourcemap=inline --watch)]},
+    bun_js: {Bun, :install_and_run, [:js, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:typster, ~w(--watch)]}
   ]
 
