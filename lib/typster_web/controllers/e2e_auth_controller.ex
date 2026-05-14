@@ -20,10 +20,12 @@ defmodule TypsterWeb.E2EAuthController do
         existing -> ensure_confirmed!(existing)
       end
 
-    # Update current_scope before calling log_in_user so that signed_in_path/1
-    # sees the user and redirects to /projects instead of /.
+    # Update current_scope so signed_in_path/1 resolves to /projects.
+    # Clear user_return_to so log_in_user does not redirect to a stale URL
+    # captured from a previous unauthenticated request.
     conn
     |> Plug.Conn.assign(:current_scope, Scope.for_user(user))
+    |> Plug.Conn.delete_session(:user_return_to)
     |> UserAuth.log_in_user(user)
   end
 
