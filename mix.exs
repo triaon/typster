@@ -102,7 +102,7 @@ defmodule Typster.MixProject do
         "bun assets install",
         "tailwind.install --if-missing"
       ],
-      "assets.build": ["tailwind typster", "bun js", "bun worker"],
+      "assets.build": ["compile", "tailwind typster", "bun js", "bun worker"],
       "assets.deploy": [
         "tailwind typster --minify",
         "bun js --minify",
