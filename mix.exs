@@ -102,12 +102,18 @@ defmodule Typster.MixProject do
         "bun assets install",
         "tailwind.install --if-missing"
       ],
-      "assets.build": ["compile", "tailwind typster", "bun js", "bun worker"],
+      "assets.build": ["compile", "tailwind typster", "bun js", "bun worker", "copy_wasm"],
       "assets.deploy": [
         "tailwind typster --minify",
         "bun js --minify",
         "bun worker --minify",
+        "copy_wasm",
         "phx.digest"
+      ],
+      copy_wasm: [
+        "cmd mkdir -p priv/static/assets/js",
+        "cmd cp assets/node_modules/@myriaddreamin/typst-ts-web-compiler/pkg/typst_ts_web_compiler_bg.wasm priv/static/assets/js/",
+        "cmd cp assets/node_modules/@myriaddreamin/typst-ts-renderer/pkg/typst_ts_renderer_bg.wasm priv/static/assets/js/"
       ],
       precommit: [
         "compile --warning-as-errors",
