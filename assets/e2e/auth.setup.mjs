@@ -9,9 +9,6 @@ export const authFile = path.join(__dirname, '.auth/session.json')
 setup('authenticate', async ({ page, request }) => {
   const email = `e2e-${Date.now()}@typster.test`
 
-  // Clear the mailbox so we get exactly the email we expect
-  await request.post('/dev/mailbox/clear')
-
   // Navigate to registration and wait for LiveView to fully mount
   await page.goto('/users/register')
   await page.waitForLoadState('networkidle')
@@ -20,15 +17,16 @@ setup('authenticate', async ({ page, request }) => {
   await page.locator('#registration_form input[type="email"]').pressSequentially(email, { delay: 30 })
   await page.locator('#registration_form button[type="submit"]').click()
 
-  // Poll the mailbox until the registration email arrives (up to 15s)
+  // Poll the mailbox until the registration email arrives (up to 15s).
+  // Match by recipient address so stale emails from previous runs don't interfere.
   let magicLink = null
   await expect.poll(
     async () => {
       const res = await request.get('/dev/mailbox/json')
       const { data: emails } = await res.json()
-      const latest = emails[emails.length - 1]
-      if (!latest) return null
-      const match = (latest.text_body ?? '').match(/http[^\s]+\/users\/log-in\/[^\s]+/)
+      const mine = emails.find((e) => e.to.includes(email))
+      if (!mine) return null
+      const match = (mine.text_body ?? '').match(/http[^\s]+\/users\/log-in\/[^\s]+/)
       if (match) magicLink = match[0]
       return magicLink
     },

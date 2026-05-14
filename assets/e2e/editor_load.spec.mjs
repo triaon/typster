@@ -4,6 +4,7 @@ import { test, expect } from '@playwright/test'
 // Returns after the editor URL is confirmed.
 async function createProjectAndOpenEditor(page, name) {
   await page.goto('/projects')
+  await page.waitForFunction(() => window.liveSocket?.isConnected?.(), { timeout: 10_000 })
   await page.locator('#new-project-button').click()
   await expect(page.locator('.ts-dialog')).toBeVisible()
 
@@ -24,8 +25,12 @@ test.describe('Typster Editor Workflow', () => {
   test('should create a project and load the editor with a file', async ({ page }) => {
     await createProjectAndOpenEditor(page, 'E2E Smoke Test')
 
-    // Click the "+" sidebar button — creates main.typ and auto-selects it
+    // Click the "+" sidebar button — opens the new-file dialog
     await page.locator('#create-main-file-button').click()
+    await expect(page.locator('.ts-dialog')).toBeVisible()
+    await page.locator('.ts-dialog input[name="path"]').fill('main.typ')
+    await page.locator('.ts-dialog button[type="submit"]').click()
+    await expect(page.locator('.ts-dialog')).not.toBeVisible()
 
     // main.typ should appear in the file tree
     await expect(
@@ -40,8 +45,12 @@ test.describe('Typster Editor Workflow', () => {
   test('should edit content in CodeMirror, autosave, and persist after reload', async ({ page }) => {
     await createProjectAndOpenEditor(page, 'E2E Autosave Test')
 
-    // Create main.typ — the editor auto-selects the new file
+    // Create main.typ via the new-file dialog
     await page.locator('#create-main-file-button').click()
+    await expect(page.locator('.ts-dialog')).toBeVisible()
+    await page.locator('.ts-dialog input[name="path"]').fill('main.typ')
+    await page.locator('.ts-dialog button[type="submit"]').click()
+    await expect(page.locator('.ts-dialog')).not.toBeVisible()
 
     // Wait for CodeMirror to initialize inside the container
     const cmContent = page.locator('#editor-container .cm-content')
