@@ -288,7 +288,11 @@ defmodule Typster.Accounts do
       case Repo.update(changeset) do
         {:ok, user} ->
           tokens_to_expire = Repo.all(from t in UserToken, where: t.user_id == ^user.id)
-          Repo.delete_all(from t in UserToken, where: t.id in ^Enum.map(tokens_to_expire, & &1.id))
+
+          Repo.delete_all(
+            from t in UserToken, where: t.id in ^Enum.map(tokens_to_expire, & &1.id)
+          )
+
           {user, tokens_to_expire}
 
         {:error, reason} ->

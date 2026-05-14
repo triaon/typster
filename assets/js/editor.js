@@ -87,6 +87,7 @@ function getLanguageExtension(lang) {
 
 export function initEditor(container, initialContent, socket, fileId, options = {}) {
   let autosaveTimer = null
+  let compileTimer = null
   const themeCompartment = new Compartment()
   const languageCompartment = new Compartment()
   const language = options.language || "typst"
@@ -108,7 +109,8 @@ export function initEditor(container, initialContent, socket, fileId, options = 
       }
 
       if (language === "typst") {
-        compileTypst(content, options.project || {})
+        clearTimeout(compileTimer)
+        compileTimer = setTimeout(() => compileTypst(content, options.project || {}), 300)
       }
     }
   })
@@ -149,9 +151,8 @@ export function initEditor(container, initialContent, socket, fileId, options = 
     updateTheme,
     updateLanguage,
     destroy: () => {
-      if (autosaveTimer) {
-        clearTimeout(autosaveTimer)
-      }
+      if (autosaveTimer) clearTimeout(autosaveTimer)
+      if (compileTimer) clearTimeout(compileTimer)
       editor.destroy()
     }
   }

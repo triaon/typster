@@ -187,6 +187,12 @@ msgstr "Неподдерживаемый формат файла."
 
 #: lib/typster_web/live/editor_live/index.html.heex:40
 #, elixir-autogen, elixir-format
+msgid "editor.create_file"
+msgstr "Создать"
+
+msgid "editor.file_name"
+msgstr "Имя файла"
+
 msgid "editor.new_file"
 msgstr "Новый файл"
 
