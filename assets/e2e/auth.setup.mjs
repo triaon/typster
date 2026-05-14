@@ -15,8 +15,8 @@ setup('authenticate', async ({ page }) => {
     () => document.querySelector('meta[name="csrf-token"]')?.content ?? ''
   )
 
-  // Submit the form via the browser (not page.request) so the resulting session
-  // cookie is stored directly in the browser context.
+  // Submit the form via the browser so the resulting session cookie lands
+  // directly in the browser context (not in a separate APIRequestContext).
   await page.evaluate(({ email, csrfToken }) => {
     const form = document.createElement('form')
     form.method = 'POST'
@@ -36,8 +36,8 @@ setup('authenticate', async ({ page }) => {
     form.submit()
   }, { email, csrfToken })
 
-  // Wait for the redirect after login to settle on an authenticated page.
   await page.waitForURL(/\/projects/, { timeout: 15_000 })
+  await page.waitForFunction(() => window.liveSocket?.isConnected?.(), { timeout: 10_000 })
 
   fs.mkdirSync(path.dirname(authFile), { recursive: true })
   await page.context().storageState({ path: authFile })

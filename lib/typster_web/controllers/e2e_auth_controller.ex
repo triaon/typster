@@ -2,6 +2,7 @@ defmodule TypsterWeb.E2EAuthController do
   use TypsterWeb, :controller
 
   alias Typster.Accounts
+  alias Typster.Accounts.Scope
   alias Typster.Accounts.User
   alias Typster.Repo
   alias TypsterWeb.UserAuth
@@ -19,7 +20,11 @@ defmodule TypsterWeb.E2EAuthController do
         existing -> ensure_confirmed!(existing)
       end
 
-    UserAuth.log_in_user(conn, user)
+    # Update current_scope before calling log_in_user so that signed_in_path/1
+    # sees the user and redirects to /projects instead of /.
+    conn
+    |> Plug.Conn.assign(:current_scope, Scope.for_user(user))
+    |> UserAuth.log_in_user(user)
   end
 
   defp insert_confirmed_user!(email) do
