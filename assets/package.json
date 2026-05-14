@@ -22,7 +22,7 @@
     "@codemirror/lang-yaml": "^6.1.2",
     "@codemirror/language": "^6.11.3",
     "@codemirror/legacy-modes": "^6.4.2",
-    "@codemirror/state": "^6.5.2",
+    "@codemirror/state": "^6.6.0",
     "@codemirror/view": "^6.39.4",
     "@lezer/highlight": "^1.2.3",
     "@myriaddreamin/typst-ts-renderer": "^0.7.0-rc2",
@@ -37,6 +37,9 @@
     "phoenix_live_view": "workspace:*",
     "simple-icons": "^16.18.0",
     "tailwind-merge": "^3.4.0"
+  },
+  "overrides": {
+    "@codemirror/state": "6.6.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",

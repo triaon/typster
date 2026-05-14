@@ -149,47 +149,7 @@ export const CodeMirror = {
     }
   },
 
-  updated() {
-    const rawContent = this.el.dataset.content || ""
-    const newContent = parseContent(rawContent)
-    const newFileId = this.el.dataset.fileId || null
-    const options = editorOptions(this.el)
-
-    if (this.previousFileId === undefined) {
-      this.previousFileId = newFileId
-    }
-
-    if (this.editorInstance) {
-      if (this.previousFileId !== newFileId) {
-        this.previousFileId = newFileId
-        this.cleanupThemeHandlers()
-        destroyEditor(this.editorInstance)
-        const container = this.el
-        this.editorInstance = initEditor(
-          container,
-          newContent,
-          this,
-          newFileId,
-          options
-        )
-        this.setupThemeHandlers()
-      } else {
-        updateEditorContent(this.editorInstance, newContent)
-      }
-    } else if (newFileId) {
-      this.previousFileId = newFileId
-      this.cleanupThemeHandlers()
-      const container = this.el
-      this.editorInstance = initEditor(
-        container,
-        newContent,
-        this,
-        newFileId,
-        options
-      )
-      this.setupThemeHandlers()
-    }
-  },
+  updated() {},
 
   destroyed() {
     this.cleanupThemeHandlers()
