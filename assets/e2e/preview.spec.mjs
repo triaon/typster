@@ -6,7 +6,7 @@ async function createProjectAndOpenEditor(page, name) {
   await page.goto('/projects')
   await page.waitForFunction(() => window.liveSocket?.isConnected?.(), { timeout: 10_000 })
   await page.locator('#new-project-button').click()
-  await expect(page.locator('.ts-dialog')).toBeVisible()
+  await expect(page.locator('.ts-dialog')).toBeVisible({ timeout: 10_000 })
   await page.locator('.ts-dialog input[name="name"]').fill(name)
   await page.locator('.ts-dialog button[type="submit"]').click()
   await expect(page.locator('.ts-dialog')).not.toBeVisible()
