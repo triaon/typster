@@ -60,7 +60,7 @@ config :bun,
   ]
 
 config :phoenix_live_view, :colocated_js,
-  node_modules_path: Path.expand("../assets/node_modules", __DIR__)
+  target_directory: Path.expand("../assets/node_modules/phoenix-colocated", __DIR__)
 
 # Configure tailwind (the version is required)
 config :tailwind,
