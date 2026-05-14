@@ -11,7 +11,7 @@ setup('authenticate', async ({ page, request }) => {
 
   // Navigate to registration and wait for LiveView to fully mount
   await page.goto('/users/register')
-  await page.waitForLoadState('networkidle')
+  await page.waitForFunction(() => window.liveSocket?.isConnected?.(), { timeout: 10_000 })
 
   // pressSequentially triggers real DOM input events, which phx-change requires
   await page.locator('#registration_form input[type="email"]').pressSequentially(email, { delay: 30 })
