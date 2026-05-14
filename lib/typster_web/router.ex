@@ -64,6 +64,14 @@ defmodule TypsterWeb.Router do
     end
   end
 
+  if Application.compile_env(:typster, :e2e_auth_routes, false) do
+    scope "/dev", TypsterWeb do
+      pipe_through :browser
+
+      post "/test-login", E2EAuthController, :create
+    end
+  end
+
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:typster, :dev_routes) do
     # If you want to use the LiveDashboard in production, you should put
